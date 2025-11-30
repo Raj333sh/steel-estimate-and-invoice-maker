@@ -22,7 +22,7 @@ body {
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -69,6 +69,30 @@ body {
   text-decoration: none;
 }
 
+/* Header NAV */
+.headerNav {
+ background: white;
+ padding: 10px 25px;
+ border-radius: 8px;
+ margin-bottom: 15px;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.navContent {
+ display: flex;
+ gap: 20px;
+ flex-direction: row;
+}
+
+.navContent a {
+ color: #3498db;
+ text-decoration: none;
+ font-weight: 600;
+ font-size: 16px;
+ transition: color 0.3s;
+}
+
+/* Input Section */
 .input-section {
   background: white;
   padding: 25px;
@@ -536,3 +560,4 @@ tfoot td {
     font-size: 13px;
   }
 }
+
