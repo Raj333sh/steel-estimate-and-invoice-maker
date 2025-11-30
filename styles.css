@@ -85,11 +85,15 @@ body {
 }
 
 .navContent a {
+ display: flex;
  color: #3498db;
  text-decoration: none;
  font-weight: 600;
  font-size: 16px;
  transition: color 0.3s;
+ text-align: center;
+ justify-items: center;
+ align-items: center;
 }
 
 /* Input Section */
@@ -560,4 +564,5 @@ tfoot td {
     font-size: 13px;
   }
 }
+
 
