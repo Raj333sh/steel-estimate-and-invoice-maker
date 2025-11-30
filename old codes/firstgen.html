@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steel Material Estimation Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .input-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .item-container {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .item-header h3 {
+            color: #34495e;
+            font-size: 18px;
+        }
+
+        .remove-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #c0392b;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .input-group select,
+        .input-group input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        .input-group select:focus,
+        .input-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .input-group select:disabled {
+            background: #ecf0f1;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-generate {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-generate:hover {
+            background: #2980b9;
+        }
+
+        .btn-print {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background: #229954;
+        }
+
+        .btn-pdf {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .btn-pdf:hover {
+            background: #8e44ad;
+        }
+
+        .results-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .results-header h2 {
+            color: #2c3e50;
+            font-size: 26px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: #ecf0f1;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        tfoot {
+            background: #e3f2fd;
+            font-weight: 700;
+        }
+
+        tfoot td {
+            color: #1976d2;
+            font-size: 16px;
+        }
+
+        .footer-note {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .input-section,
+            .btn-print,
+            .btn-pdf {
+                display: none !important;
+            }
+            .results-section {
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+            .results-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <span>📐</span>
+                Steel Material Estimation Calculator
+            </h1>
+            <p>Professional structural steel quantity and cost estimation tool</p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <h2 class="section-title">Material Input</h2>
+            <div id="items-container"></div>
+            <div class="button-group">
+                <button class="btn btn-add" onclick="addItem()">
+                    <span>➕</span> Add Another Item
+                </button>
+                <button class="btn btn-generate" onclick="generateEstimate()">
+                    <span>🧮</span> Generate Estimate
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="results-section">
+            <div class="results-header">
+                <h2>Estimation Results</h2>
+                <div class="button-group">
+                    <button class="btn btn-print" onclick="window.print()">
+                        <span>🖨️</span> Print
+                    </button>
+                    <button class="btn btn-pdf" onclick="downloadPDF()">
+                        <span>📄</span> Download PDF
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Material Type</th>
+                            <th>Section Size</th>
+                            <th>Weight/m (kg)</th>
+                            <th>Length (m)</th>
+                            <th>Qty</th>
+                            <th>Total Weight (kg)</th>
+                            <th>Cost/kg (₹)</th>
+                            <th>Total Cost (₹)</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-body"></tbody>
+                    <tfoot id="results-footer"></tfoot>
+                </table>
+            </div>
+            <div class="footer-note">
+                <p><strong>Date:</strong> <span id="estimate-date"></span></p>
+                <p style="margin-top: 10px;"><strong>Note:</strong> All weights are calculated as per IS standards. Actual weights may vary slightly.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive Steel Database
+        const steelDatabase = {
+            "ISMB": {
+                "100": { weight: 11.5, depth: 100, width: 75 },
+                "125": { weight: 13.7, depth: 125, width: 75 },
+                "150": { weight: 15.0, depth: 150, width: 80 },
+                "175": { weight: 19.6, depth: 175, width: 90 },
+                "200": { weight: 25.4, depth: 200, width: 100 },
+                "225": { weight: 31.2, depth: 225, width: 110 },
+                "250": { weight: 37.3, depth: 250, width: 125 },
+                "300": { weight: 46.1, depth: 300, width: 140 },
+                "350": { weight: 52.4, depth: 350, width: 140 },
+                "400": { weight: 61.6, depth: 400, width: 140 },
+                "450": { weight: 72.4, depth: 450, width: 150 },
+                "500": { weight: 86.9, depth: 500, width: 180 },
+                "550": { weight: 101.8, depth: 550, width: 190 },
+                "600": { weight: 122.6, depth: 600, width: 210 }
+            },
+            "ISMC": {
+                "75": { weight: 7.14, depth: 75, width: 40 },
+                "100": { weight: 9.56, depth: 100, width: 50 },
+                "125": { weight: 13.1, depth: 125, width: 65 },
+                "150": { weight: 16.8, depth: 150, width: 75 },
+                "175": { weight: 19.6, depth: 175, width: 75 },
+                "200": { weight: 22.3, depth: 200, width: 75 },
+                "225": { weight: 26.1, depth: 225, width: 80 },
+                "250": { weight: 31.1, depth: 250, width: 80 },
+                "300": { weight: 36.3, depth: 300, width: 90 },
+                "350": { weight: 41.8, depth: 350, width: 100 },
+                "400": { weight: 50.1, depth: 400, width: 100 }
+            },
+            "ISA Equal": {
+                "20x20x3": { weight: 0.88 },
+                "25x25x3": { weight: 1.11 },
+                "25x25x5": { weight: 1.77 },
+                "30x30x3": { weight: 1.36 },
+                "30x30x5": { weight: 2.18 },
+                "40x40x3": { weight: 1.84 },
+                "40x40x5": { weight: 2.97 },
+                "40x40x6": { weight: 3.52 },
+                "45x45x5": { weight: 3.38 },
+                "50x50x5": { weight: 3.77 },
+                "50x50x6": { weight: 4.47 },
+                "60x60x5": { weight: 4.57 },
+                "60x60x6": { weight: 5.42 },
+                "60x60x8": { weight: 7.09 },
+                "65x65x6": { weight: 5.91 },
+                "70x70x6": { weight: 6.38 },
+                "75x75x6": { weight: 6.85 },
+                "75x75x8": { weight: 8.99 },
+                "80x80x6": { weight: 7.34 },
+                "90x90x6": { weight: 8.28 },
+                "90x90x8": { weight: 10.9 },
+                "100x100x6": { weight: 9.18 },
+                "100x100x8": { weight: 12.1 },
+                "100x100x10": { weight: 15.1 },
+                "110x110x8": { weight: 13.4 },
+                "120x120x8": { weight: 14.7 },
+                "130x130x10": { weight: 19.7 },
+                "150x150x10": { weight: 22.9 },
+                "150x150x12": { weight: 27.3 },
+                "200x200x15": { weight: 45.0 }
+            },
+            "ISA Unequal": {
+                "30x20x3": { weight: 1.11 },
+                "40x25x3": { weight: 1.48 },
+                "50x30x5": { weight: 2.97 },
+                "60x40x5": { weight: 3.73 },
+                "60x40x6": { weight: 4.43 },
+                "65x50x5": { weight: 4.30 },
+                "75x50x6": { weight: 5.60 },
+                "75x50x8": { weight: 7.30 },
+                "80x60x6": { weight: 6.31 },
+                "90x60x6": { weight: 6.77 },
+                "100x65x7": { weight: 8.77 },
+                "100x75x8": { weight: 10.6 },
+                "110x70x8": { weight: 10.9 },
+                "125x75x8": { weight: 12.2 },
+                "125x95x8": { weight: 13.4 },
+                "150x115x10": { weight: 20.3 },
+                "200x150x15": { weight: 40.1 }
+            },
+            "MS Flat": {
+                "20x3": { weight: 0.47 },
+                "20x5": { weight: 0.79 },
+                "20x6": { weight: 0.94 },
+                "25x3": { weight: 0.59 },
+                "25x5": { weight: 0.98 },
+                "25x6": { weight: 1.18 },
+                "32x3": { weight: 0.75 },
+                "32x6": { weight: 1.51 },
+                "40x5": { weight: 1.57 },
+                "40x6": { weight: 1.88 },
+                "50x5": { weight: 1.96 },
+                "50x6": { weight: 2.36 },
+                "50x8": { weight: 3.14 },
+                "50x10": { weight: 3.93 },
+                "65x6": { weight: 3.06 },
+                "65x8": { weight: 4.08 },
+                "75x6": { weight: 3.53 },
+                "75x8": { weight: 4.71 },
+                "75x10": { weight: 5.89 },
+                "100x6": { weight: 4.71 },
+                "100x8": { weight: 6.28 },
+                "100x10": { weight: 7.85 },
+                "100x12": { weight: 9.42 },
+                "125x10": { weight: 9.81 },
+                "150x10": { weight: 11.8 },
+                "150x12": { weight: 14.1 }
+            },
+            "Round Bar": {
+                "6": { weight: 0.222 },
+                "8": { weight: 0.395 },
+                "10": { weight: 0.617 },
+                "12": { weight: 0.888 },
+                "16": { weight: 1.578 },
+                "20": { weight: 2.466 },
+                "25": { weight: 3.853 },
+                "28": { weight: 4.83 },
+                "32": { weight: 6.313 },
+                "36": { weight: 8.00 },
+                "40": { weight: 9.864 },
+                "45": { weight: 12.5 },
+                "50": { weight: 15.41 },
+                "56": { weight: 19.3 },
+                "60": { weight: 22.19 },
+                "63": { weight: 24.5 },
+                "71": { weight: 31.1 },
+                "75": { weight: 34.68 },
+                "80": { weight: 39.5 },
+                "90": { weight: 49.9 },
+                "100": { weight: 61.65 },
+                "110": { weight: 74.6 },
+                "125": { weight: 96.3 },
+                "140": { weight: 120.8 },
+                "160": { weight: 157.8 },
+                "180": { weight: 199.8 },
+                "200": { weight: 246.6 }
+
+            },
+            "MS Plate": {
+                "6mm": { weight: 47.1 },
+                "8mm": { weight: 62.8 },
+                "10mm": { weight: 78.5 },
+                "12mm": { weight: 94.2 },
+                "16mm": { weight: 125.6 },
+                "20mm": { weight: 157 },
+                "25mm": { weight: 196.25 },
+                "32mm": { weight: 251.2 },
+                "40mm": { weight: 314 },
+                "50mm": { weight: 392.5 }
+            },
+            "RHS": {
+                "40x20x2": { weight: 1.42 },
+                "50x25x2": { weight: 1.78 },
+                "60x40x3": { weight: 3.63 },
+                "80x40x3": { weight: 4.32 },
+                "100x50x3": { weight: 5.36 },
+                "120x60x4": { weight: 8.59 },
+                "150x100x5": { weight: 14.8 },
+                "200x100x6": { weight: 21.3 }
+            },
+            "SHS": {
+                "25x25x2": { weight: 1.12 },
+                "40x40x2": { weight: 1.84 },
+                "50x50x3": { weight: 3.44 },
+                "60x60x3": { weight: 4.19 },
+                "80x80x4": { weight: 7.44 },
+                "100x100x5": { weight: 11.6 },
+                "120x120x6": { weight: 16.7 },
+                "150x150x6": { weight: 21.2 }
+            },
+            "CHS": {
+                "21.3x2.3": { weight: 1.12 },
+                "26.9x2.3": { weight: 1.44 },
+                "33.7x2.6": { weight: 2.09 },
+                "42.4x2.6": { weight: 2.69 },
+                "48.3x2.9": { weight: 3.44 },
+                "60.3x2.9": { weight: 4.37 },
+                "76.1x3.2": { weight: 6.09 },
+                "88.9x3.2": { weight: 7.13 },
+                "114.3x4.0": { weight: 11.4 },
+                "139.7x4.5": { weight: 15.9 },
+                "168.3x4.5": { weight: 19.3 }
+            }
+        };
+
+        let items = [];
+        let itemCounter = 0;
+
+        // Initialize first item
+        function init() {
+            addItem();
+        }
+
+        // Add new item
+        function addItem() {
+            itemCounter++;
+            const itemId = itemCounter;
+            
+            items.push({
+                id: itemId,
+                materialType: '',
+                sectionSize: '',
+                length: '',
+                quantity: '',
+                costPerKg: '',
+                notes: ''
+            });
+
+            renderItems();
+        }
+
+        // Remove item
+        function removeItem(id) {
+            if (items.length > 1) {
+                items = items.filter(item => item.id !== id);
+                renderItems();
+            }
+        }
+
+        // Update item field
+        function updateItem(id, field, value) {
+            const item = items.find(item => item.id === id);
+            if (item) {
+                item[field] = value;
+                if (field === 'materialType') {
+                    item.sectionSize = '';
+                    renderItems();
+                }
+            }
+        }
+
+        // Render all items
+        function renderItems() {
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+
+            items.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item-container';
+                itemDiv.innerHTML = `
+                    <div class="item-header">
+                        <h3>Item ${index + 1}</h3>
+                        ${items.length > 1 ? `<button class="remove-btn" onclick="removeItem(${item.id})">🗑️ Remove</button>` : ''}
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Material Type *</label>
+                            <select onchange="updateItem(${item.id}, 'materialType', this.value)">
+                                <option value="">Select Material</option>
+                                ${Object.keys(steelDatabase).map(type => 
+                                    `<option value="${type}" ${item.materialType === type ? 'selected' : ''}>${type}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Section Size *</label>
+                            <select onchange="updateItem(${item.id}, 'sectionSize', this.value)" ${!item.materialType ? 'disabled' : ''}>
+                                <option value="">Select Size</option>
+                                ${item.materialType ? Object.keys(steelDatabase[item.materialType]).map(size =>
+                                    `<option value="${size}" ${item.sectionSize === size ? 'selected' : ''}>${size}</option>`
+                                ).join('') : ''}
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Length (meters) *</label>
+                            <input type="number" step="0.01" placeholder="e.g., 6.00" value="${item.length}" 
+                                   oninput="updateItem(${item.id}, 'length', this.value)">
+                        </div>
+                        <div class="input-group">
+                            <label>Quantity *</label>
+                            <input type="number" placeholder="e.g., 10" value="${item.quantity}" 
+                                   oninput="updateItem(${item.id}, 'quantity', this.value)">
+                        </div>
+                        <div class="input-group">
+                            <label>Cost per kg (₹)</label>
+                            <input type="number" step="0.01" placeholder="e.g., 65.00" value="${item.costPerKg}" 
+                                   oninput="updateItem(${item.id}, 'costPerKg', this.value)">
+                        </div>
+                        <div class="input-group">
+                            <label>Notes</label>
+                            <input type="text" placeholder="Optional notes" value="${item.notes}" 
+                                   oninput="updateItem(${item.id}, 'notes', this.value)">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        // Generate estimate
+        function generateEstimate() {
+            const calculations = [];
+            let hasError = false;
+
+            items.forEach(item => {
+                if (!item.materialType || !item.sectionSize || !item.length || !item.quantity) {
+                    hasError = true;
+                    return;
+                }
+
+                const sectionData = steelDatabase[item.materialType][item.sectionSize];
+                const weightPerMeter = sectionData.weight;
+                const totalWeight = weightPerMeter * parseFloat(item.length) * parseInt(item.quantity);
+                const totalCost = item.costPerKg ? totalWeight * parseFloat(item.costPerKg) : 0;
+
+                calculations.push({
+                    ...item,
+                    weightPerMeter: weightPerMeter,
+                    totalWeight: totalWeight.toFixed(2),
+                    totalCost: totalCost.toFixed(2)
+                });
+            });
+
+            if (hasError) {
+                alert('Please fill all required fields (marked with *) for all items.');
+                return;
+            }
+
+            if (calculations.length === 0) {
+                alert('Please add at least one item.');
+                return;
+            }
+
+            displayResults(calculations);
+        }
+
+        // Display results
+        function displayResults(calculations) {
+            const tbody = document.getElementById('results-body');
+            const tfoot = document.getElementById('results-footer');
+            
+            tbody.innerHTML = '';
+            
+            let grandTotalWeight = 0;
+            let grandTotalCost = 0;
+
+            calculations.forEach((item, index) => {
+                grandTotalWeight += parseFloat(item.totalWeight);
+                grandTotalCost += parseFloat(item.totalCost);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.materialType}</td>
+                    <td><strong>${item.sectionSize}</strong></td>
+                    <td>${item.weightPerMeter}</td>
+                    <td>${item.length}</td>
+                    <td>${item.quantity}</td>
+                    <td><strong>${item.totalWeight}</strong></td>
+                    <td>${item.costPerKg || '-'}</td>
+                    <td><strong>${item.totalCost > 0 ? item.totalCost : '-'}</strong></td>
+                    <td>${item.notes || '-'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            tfoot.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: right;"><strong>Grand Total:</strong></td>
+                    <td><strong>${grandTotalWeight.toFixed(2)} kg</strong></td>
+                    <td></td>
+                    <td><strong>₹ ${grandTotalCost.toFixed(2)}</strong></td>
+                    <td></td>
+                </tr>
+            `;
+
+            document.getElementById('estimate-date').textContent = new Date().toLocaleDateString();
+            document.getElementById('results-section').classList.add('active');
+            
+            // Scroll to results
+            document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Download PDF function
+        function downloadPDF() {
+            alert('Please use the Print button and select "Save as PDF" from your browser\'s print dialog.');
+        }
+
+        // Initialize on page load
+        window.onload = init;
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <button class="btn btn-add" onclick="addGst()">
+                    <span>🎫</span> Add GST 18%
+                </button>
+    <script>
+        function addGst() {
+            let totalCost = prompt("Enter the total cost:");
+            if (totalCost !== null) {
+                let gstAmount = totalCost * 0.18;
+                console.log("GST Amount (18%): " + gstAmount.toFixed(2));
+            }
+        }
+    </script>
+</body>
+</html>
