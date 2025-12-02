@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Free Steel Estimate and Invoice Generator - Fast, accurate tool for calculating weights and costs of steel materials. Ideal for fabricators, engineers, and contractors.">
+    <meta name="keywords" content="steel weight calculator, steel cost calculator, steel estimate generator, steel invoice generator, steel density, fabrication tools, construction estimator, metal weight formula, pipe weight calculator, plate weight calculator, free steel calculator">
+    <meta name="author" content="Steel Estimate Maker">
+    <meta property="og:title" content="Steel Estimate & Invoice Generator - Free Tool">
+    <meta property="og:description" content="Calculate steel weights, costs, and generate professional invoices instantly. Support for all major steel sections.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='52'>⚙️</text></svg>" />
+    <title>Free steel estimate generator</title>
+    <link rel="stylesheet" href="estimate.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-logo">
+          ⚙️
+        </div>
+        <div class="header-data">
+          <h1>
+            <span style="padding-bottom: 10px">📐</span>
+            Steel Material Estimate Generator
+          </h1>
+          <p>Professional structural steel quantity and cost estimation tool</p>
+          <p>Steel Estimate and Invoice Maker</p>
+        </div>
+        <div class="header-logo">
+          <a href="./assets/GooglePay_QR.png" class="support-btn">
+          <span>💝</span> 
+          </a>
+        </div>
+      </div>
+
+      <!--Header NAV-->
+      <div class="headerNav">
+        <nav class="navContent">
+          <a href="index.html"> Home </a>
+          <a href="" class="estNavSelected"> Estimate Generator </a>
+          <a href="invoice.html"> Invoice Generator </a>
+        </nav>
+      </div>
+
+      <!-- Input Section -->
+      <div class="input-section">
+        <div class="project-details">
+          <div class="input-group">
+            <label for="orgName">From:</label>
+            <input
+              type="text"
+              id="orgName"
+              placeholder="Enter Your Organization Name"
+            />
+          </div>
+          <div class="input-group">
+            <label for="address">Address:</label>
+            <input type="text" id="aDdress" placeholder="Enter Your Address" />
+          </div>
+          <div class="input-group">
+            <label for="contact">Contact:</label>
+            <input
+              type="text"
+              id="cOntact"
+              placeholder="Enter Your Contact Details"
+            />
+          </div>
+          <div class="input-group">
+            <label for="projectName">Project Name:</label>
+            <input
+              type="text"
+              id="projectName"
+              placeholder="Enter Project Name"
+            />
+          </div>
+          <div class="input-group">
+            <label for="customerName">To:</label>
+            <input
+              type="text"
+              id="customerName"
+              placeholder="Enter Customer Name"
+            />
+          </div>
+          <div class="input-group">
+            <label for="estimateDate">Date:</label>
+            <input type="date" id="dAte" placeholder="Date" />
+          </div>
+        </div>
+        <h2 class="section-title">Material Input</h2>
+        <div id="items-container"></div>
+        <div class="button-group">
+          <button class="btn btn-add" onclick="addItem()">
+            <span>➕</span> Add Another Item
+          </button>
+          <button class="btn btn-igstOption">
+            <label>
+              <input type="checkbox" id="igstCalculate" />
+              <span><strong>Calculate IGST</strong></span>
+            </label>
+          </button>
+          <button class="btn btn-generate" onclick="generateEstimate()">
+            <span>🧮</span> Generate Estimate
+          </button>
+        </div>
+        <div class="footer-note-input">
+          <label for="customerNotes" class="footerInputLebel"
+            >Additional Notes for Customer:</label
+          >
+          <textarea
+            id="customerNotes"
+            class="customerNotes"
+            placeholder="Enter any important terms, conditions, or customer-specific notes here..."
+          ></textarea>
+        </div>
+        <div class="footer-signature">
+          <label for="signature" class="preparedBy">Prepared By:</label>
+          <textarea
+            id="signature"
+            class="signature"
+            placeholder="Enter Your Name and Other Detail"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-section" id="results-section">
+        <div class="results-header">
+          <div class="project-info-display">
+            <p><strong>From:</strong> <span id="displayOrgName"></span></p>
+            <p><strong>Address:</strong> <span id="displayAddress"></span></p>
+            <p><strong>Contact:</strong> <span id="displayContact"></span></p>
+            <p>
+              <strong>Project:</strong> <span id="displayProjectName"></span>
+            </p>
+            <p><strong>To:</strong> <span id="displayCustomerName"></span></p>
+            <p><strong>Date:</strong> <span id="displayEstimateDate"></span></p>
+          </div>
+          <div class="results-header-right">
+            <h2>ESTIMATE</h2>
+            <div class="button-group">
+              <button class="btn btn-print" onclick="window.print()">
+                <span>🖨️</span> Print
+              </button>
+              <button class="btn btn-pdf" onclick="downloadPDF()">
+                <span>📄</span> Download PDF
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="table-container">
+          <table id="results-table">
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Material Type</th>
+                <th>Custom Description</th>
+                <th>Section Size</th>
+                <th>Weight/m (kg)</th>
+                <th>Input Length</th>
+                <th>Input Width</th>
+                <th>Unit</th>
+                <th>Qty</th>
+                <th>Total Weight (kg)</th>
+                <th>Cost/kg (₹)</th>
+                <th>Cost/qty.</th>
+                <th>Total Cost (₹)</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+            <tfoot id="results-footer"></tfoot>
+          </table>
+        </div>
+        <div class="footer-note">
+          <p><strong>Notes:</strong></p>
+          <p>
+            All weights are calculated as per IS standards. Actual weights may
+            vary slightly.
+          </p>
+          <div id="displayCustomerNotes" style="white-space: pre-wrap"></div>
+        </div>
+        <div class="signature-footer">
+          <p><span>Authorised Seal & Signature</span></p>
+          <div id="displayFooterOrgName" style="white-space: pre-wrap"></div>
+          <p>Prepared By: <span id="displayPreparedBy"> </span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>Steel Estimate & Invoice Generator</strong></p>
+            <p>Free tool for steel weight and cost calculations</p>
+            <p>Contact: <a href="mailto:mishra.raja1998@gmail.com">mishra.raja1998@gmail.com</a></p>
+            <p style="margin-top: 20px; opacity: 0.7;">© 2025 Steel Estimate and Invoice Maker. All rights reserved.</p>
+            <p style="opacity: 0.7;">Keywords: steel weight calculator, steel cost calculator, fabrication tools, construction estimator</p>
+        </div>
+    </footer>
+
+    <script src="estimate.js"></script>
+  </body>
+</html>

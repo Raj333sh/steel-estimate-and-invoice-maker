@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Free Steel Estimate and Invoice Generator - Fast, accurate tool for calculating weights and costs of steel materials. Ideal for fabricators, engineers, and contractors.">
+    <meta name="keywords" content="steel weight calculator, steel cost calculator, steel estimate generator, steel invoice generator, steel density, fabrication tools, construction estimator, metal weight formula, pipe weight calculator, plate weight calculator, free steel calculator">
+    <meta name="author" content="Steel Estimate Maker">
+    <meta property="og:title" content="Steel Estimate & Invoice Generator - Free Tool">
+    <meta property="og:description" content="Calculate steel weights, costs, and generate professional invoices instantly. Support for all major steel sections.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='52'>⚙️</text></svg>" />
+    <title>Free steel invoice generator</title>
+    <link rel="stylesheet" href="invoice.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-logo">
+          ⚙️
+        </div>
+        <div class="header-data">
+          <h1>
+            <span style="padding-bottom: 10px">🧾</span>
+            Steel Material Invoice Generator
+          </h1>
+          <p>Professional structural steel quantity and cost estimation tool</p>
+          <p>Steel Estimate and Invoice Maker</p>
+        </div>
+        <div class="header-logo">
+          <a href="./assets/GooglePay_QR.png" class="support-btn">
+        <span>💝</span> 
+      </a>
+        </div>
+      </div>
+
+      <!--Header NAV-->
+      <div class="headerNav">
+        <nav class="navContent">
+          <a href="index.html"> Home </a>
+          <a href="estimate.html"> Estimate Generator </a>
+          <a href="" class="invNavSelected"> Invoice Generator </a>
+        </nav>
+      </div>
+
+      <!-- Input Section -->
+      <div class="input-section">
+        <div class="seller-details">
+          <div class="input-group">
+            <label for="seller">Seller:</label>
+            <input
+              type="text"
+              id="seller"
+              placeholder="Your Organization Name"
+            />
+          </div>
+          <div class="input-group">
+            <label for="addressSlr">Address:</label>
+            <input type="text" id="addressSlr" placeholder="Your Address" />
+          </div>
+          <div class="input-group">
+            <label for="gstNumberSlr">GSTIN:</label>
+            <input
+              type="text"
+              id="gstNumberSlr"
+              placeholder="Your GST Number"
+            />
+          </div>
+          <div class="input-group">
+            <label for="panSlr">PAN:</label>
+            <input type="text" id="panSlr" placeholder="Your PAN Number" />
+          </div>
+          <div class="input-group">
+            <label for="contactSlr">Contact:</label>
+            <input
+              type="tel"
+              id="contactSlr"
+              placeholder="Your Contact Number"
+            />
+          </div>
+          <div class="input-group">
+            <label for="emailSlr">Email:</label>
+            <input type="email" id="emailSlr" placeholder="Your Email id" />
+          </div>
+          <div class="input-group">
+            <label for="shipFrom">Shipping From:</label>
+            <input type="text" id="shipFrom" placeholder="Place of Supply" />
+          </div>
+        </div>
+
+        <div class="buyer-details">
+          <div class="input-group">
+            <label for="buyerName">Buyer:</label>
+            <input type="text" id="buyerName" placeholder="Buyer Name" />
+          </div>
+          <div class="input-group">
+            <label for="addressBuyer">Address:</label>
+            <input type="text" id="addressBuyer" placeholder="Buyer Address" />
+          </div>
+          <div class="input-group">
+            <label for="gstNumberBuyer">GSTIN:</label>
+            <input type="text" id="gstNumberBuyer" placeholder="Buyer GST" />
+          </div>
+          <div class="input-group">
+            <label for="panBuyer">PAN:</label>
+            <input type="text" id="panBuyer" placeholder="Buyer PAN" />
+          </div>
+          <div class="input-group">
+            <label for="contactBuyer">Contact:</label>
+            <input
+              type="tel"
+              id="contactBuyer"
+              placeholder="Buyer Contact Number"
+            />
+          </div>
+          <div class="input-group">
+            <label for="emailBuyer">Email:</label>
+            <input type="email" id="emailBuyer" placeholder="Buyer Email id" />
+          </div>
+        </div>
+
+        <div class="shipping-details">
+          <div class="input-group">
+            <label for="consigneeName">Consignee Name:</label>
+            <input
+              type="text"
+              id="consigneeName"
+              placeholder="Consignee Name"
+            />
+          </div>
+          <div class="input-group">
+            <label for="addressConsignee">Address:</label>
+            <input
+              type="text"
+              id="addressConsignee"
+              placeholder="Consignee Address"
+            />
+          </div>
+          <div class="input-group">
+            <label for="contactConsignee">Contact:</label>
+            <input
+              type="text"
+              id="contactConsignee"
+              placeholder="Consignee Contact Number"
+            />
+          </div>
+          <div class="input-group">
+            <label for="gstNumberConsignee">GSTIN:</label>
+            <input
+              type="text"
+              id="gstNumberConsignee"
+              placeholder="Consignee GST"
+            />
+          </div>
+          <div class="input-group">
+            <label for="panConsignee">PAN:</label>
+            <input type="text" id="panConsignee" placeholder="Consignee PAN" />
+          </div>
+        </div>
+
+        <div class="invoice-details">
+          <div class="input-group">
+            <label for="poNum">PO No:</label>
+            <input type="text" id="poNum" placeholder="Purchase Order Number" />
+          </div>
+          <div class="input-group">
+            <label for="poDate">PO Date:</label>
+            <input type="date" id="poDate" placeholder="Purchase Order date" />
+          </div>
+          <div class="input-group">
+            <label for="invNum">Invoice No:</label>
+            <input type="text" id="invNum" placeholder="Invoice Number" />
+          </div>
+          <div class="input-group">
+            <label for="invDate">Invoice Date:</label>
+            <input type="date" id="invDate" placeholder="invoice date" />
+          </div>
+          <div class="input-group">
+            <label for="eWayNum">E-Way Bill No:</label>
+            <input type="text" id="eWayNum" placeholder="E-Way Bill Number" />
+          </div>
+        </div>
+
+        <h2 class="section-title">Material Input</h2>
+        <div id="items-container"></div>
+        <div class="button-group">
+          <button class="btn btn-add" onclick="addItem()">
+            <span>➕</span> Add Another Item
+          </button>
+          <button class="btn btn-igstOption">
+            <label>
+              <input type="checkbox" id="igstCalculate" />
+              <span><strong>Calculate IGST</strong></span>
+            </label>
+          </button>
+          <button class="btn btn-generate" onclick="generateInvoice()">
+            <span>🧮</span> Generate Invoice
+          </button>
+        </div>
+        <div class="footer-note-input">
+          <label for="customerNotes" class="footerInputLebel"
+            >Additional Notes for Customer:</label
+          >
+          <textarea
+            id="customerNotes"
+            class="customerNotes"
+            placeholder="Enter any important terms, conditions, or customer-specific notes here..."
+          ></textarea>
+        </div>
+        <div class="footer-signature">
+          <label for="signature" class="preparedBy">Prepared By:</label>
+          <textarea
+            id="signature"
+            class="signature"
+            placeholder="Enter Your Name and Other Detail"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-section" id="results-section">
+        <div class="results-header">
+          <div class="sellerSection">
+            <div class="seller-info-display">
+              <p>
+                <strong>Seller Name:</strong><span id="displaySeller"></span>
+              </p>
+              <p>
+                <strong>Address:</strong><span id="displayAddressSlr"></span>
+              </p>
+              <p>
+                <strong>GST No:</strong><span id="displayGstNumberSlr"></span>
+              </p>
+              <p><strong>PAN No:</strong><span id="displayPanSlr"></span></p>
+              <p>
+                <strong>Contact:</strong> <span id="displayContactSlr"></span>
+              </p>
+              <p><strong>Email:</strong> <span id="displayEmailSlr"></span></p>
+              <p>
+                <strong>Shipping From:</strong
+                ><span id="displayShipFrom"></span>
+              </p>
+            </div>
+            <div class="titleAndBtn-display">
+              <h2>TAX INVOICE</h2>
+              <div class="button-group">
+                <button class="btn btn-print" onclick="window.print()">
+                  <span>🖨️</span> Print
+                </button>
+                <button class="btn btn-pdf" onclick="downloadPDF()">
+                  <span>📄</span> Download PDF
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="buyerSection">
+            <div class="billing-info-display">
+              <p>
+                <strong>Buyer Name:</strong><span id="displayBuyerName"></span>
+              </p>
+              <p>
+                <strong>Address:</strong><span id="displayAddressBuyer"></span>
+              </p>
+              <p>
+                <strong>GST No:</strong><span id="displayGstNumberBuyer"></span>
+              </p>
+              <p><strong>PAN No:</strong><span id="displayPanBuyer"></span></p>
+              <p>
+                <strong>Contact:</strong> <span id="displayContactBuyer"></span>
+              </p>
+              <p>
+                <strong>Email:</strong> <span id="displayEmailBuyer"></span>
+              </p>
+            </div>
+            <div class="shipping-info-display">
+              <p>
+                <strong>Consignee Name:</strong
+                ><span id="displayConsigneeName"></span>
+              </p>
+              <p>
+                <strong>Address:</strong
+                ><span id="displayAddressConsignee"></span>
+              </p>
+              <p>
+                <strong>Contact:</strong>
+                <span id="displayContactConsignee"></span>
+              </p>
+              <p>
+                <strong>GST No:</strong
+                ><span id="displayGstNumberConsignee"></span>
+              </p>
+              <p>
+                <strong>PAN No:</strong><span id="displayPanConsignee"></span>
+              </p>
+            </div>
+            <div class="invoice-info-display">
+              <p><strong>PO No:</strong><span id="displayPoNum"></span></p>
+              <p><strong>PO Date:</strong><span id="displayPoDate"></span></p>
+              <p>
+                <strong>Invoice No:</strong><span id="displayInvNum"></span>
+              </p>
+              <p>
+                <strong>Invoice Date:</strong><span id="displayInvDate"></span>
+              </p>
+              <p>
+                <strong>E-Way Bill No:</strong><span id="displayEWayNum"></span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table id="results-table">
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Material Type</th>
+                <th>Custom Description</th>
+                <th>Section Size</th>
+                <th>Weight/m (kg)</th>
+                <th>Input Length</th>
+                <th>Input Width</th>
+                <th>Unit</th>
+                <th>Qty</th>
+                <th>Total Weight (kg)</th>
+                <th>Cost/kg (₹)</th>
+                <th>Cost/qty.</th>
+                <th>Total Cost (₹)</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+            <tfoot id="results-footer"></tfoot>
+          </table>
+        </div>
+
+        <div class="footer-note">
+          <p><strong>Notes:</strong></p>
+          <p>
+            All weights are calculated as per IS standards. Actual weights may
+            vary slightly.
+          </p>
+          <div id="displayCustomerNotes" style="white-space: pre-wrap"></div>
+        </div>
+        <div class="signature-footer">
+          <p><span>Authorised Seal & Signature</span></p>
+          <div id="displayFooterSellerName" style="white-space: pre-wrap"></div>
+          <p>Prepared By: <span id="displayPreparedBy"> </span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>Steel Estimate & Invoice Generator</strong></p>
+            <p>Free tool for steel weight and cost calculations</p>
+            <p>Contact: <a href="mailto:mishra.raja1998@gmail.com">mishra.raja1998@gmail.com</a></p>
+            <p style="margin-top: 20px; opacity: 0.7;">© 2025 Steel Estimate and Invoice Maker. All rights reserved.</p>
+            <p style="opacity: 0.7;">Keywords: steel weight calculator, steel cost calculator, fabrication tools, construction estimator</p>
+        </div>
+    </footer>
+
+    <script src="invoice.js"></script>
+  </body>
+</html>

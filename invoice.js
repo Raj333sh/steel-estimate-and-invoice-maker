@@ -1,0 +1,1689 @@
+    // Set max date for estimate date input
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("poDate").setAttribute("max", today);
+      document.getElementById("invDate").setAttribute("max", today);
+
+      //checkbox click for IGST
+      const igstBtn = document.querySelector(".btn-igstOption");
+      const igstCheckbox = document.getElementById("igstCalculate");
+      igstBtn.addEventListener("click", () => {
+        igstCheckbox.checked = !igstCheckbox.checked; // toggle checkbox
+      });
+
+      // Comprehensive Steel Database
+      const steelDatabase = {
+        "MS TMT Bar": {
+          6: { weight: 0.222 },
+          8: { weight: 0.395 },
+          10: { weight: 0.617 },
+          12: { weight: 0.888 },
+          16: { weight: 1.579 },
+          20: { weight: 2.466 },
+          25: { weight: 3.853 },
+          28: { weight: 4.831 },
+          32: { weight: 6.313 },
+          36: { weight: 7.981 },
+          40: { weight: 9.864 },
+          45: { weight: 12.48 },
+          50: { weight: 15.42 },
+        },
+        "MS Square Bar": {
+          8: { weight: 0.502 },
+          10: { weight: 0.785 },
+          12: { weight: 1.13 },
+          16: { weight: 2.01 },
+          20: { weight: 3.14 },
+          25: { weight: 4.906 },
+          32: { weight: 8.038 },
+          40: { weight: 12.56 },
+          50: { weight: 19.625 },
+          60: { weight: 28.26 },
+          75: { weight: 44.156 },
+          90: { weight: 63.585 },
+          100: { weight: 78.5 },
+          120: { weight: 113.04 },
+        },
+        "SS Square Bar 304": {
+          6: { weight: 0.285 },
+          8: { weight: 0.508 },
+          10: { weight: 0.793 },
+          12: { weight: 1.142 },
+          16: { weight: 2.03 },
+          20: { weight: 3.172 },
+          25: { weight: 4.956 },
+          30: { weight: 7.137 },
+          40: { weight: 12.688 },
+          50: { weight: 19.825 },
+          60: { weight: 28.548 },
+          75: { weight: 44.606 },
+          100: { weight: 79.3 },
+          120: { weight: 114.192 },
+        },
+        "MS ISA Equal (Angle-L Shape-Equal)": {
+          "20x20x3": { weight: 0.88 },
+          "25x25x3": { weight: 1.11 },
+          "25x25x5": { weight: 1.77 },
+          "30x30x3": { weight: 1.36 },
+          "30x30x5": { weight: 2.18 },
+          "40x40x3": { weight: 1.84 },
+          "40x40x5": { weight: 2.97 },
+          "40x40x6": { weight: 3.52 },
+          "45x45x5": { weight: 3.38 },
+          "50x50x5": { weight: 3.77 },
+          "50x50x6": { weight: 4.47 },
+          "60x60x5": { weight: 4.57 },
+          "60x60x6": { weight: 5.42 },
+          "60x60x8": { weight: 7.09 },
+          "65x65x6": { weight: 5.91 },
+          "70x70x6": { weight: 6.38 },
+          "75x75x6": { weight: 6.85 },
+          "75x75x8": { weight: 8.99 },
+          "80x80x6": { weight: 7.34 },
+          "90x90x6": { weight: 8.28 },
+          "90x90x8": { weight: 10.9 },
+          "100x100x6": { weight: 9.18 },
+          "100x100x8": { weight: 12.1 },
+          "100x100x10": { weight: 15.1 },
+          "110x110x8": { weight: 13.4 },
+          "120x120x8": { weight: 14.7 },
+          "130x130x10": { weight: 19.7 },
+          "150x150x10": { weight: 22.9 },
+          "150x150x12": { weight: 27.3 },
+          "200x200x15": { weight: 45.0 },
+        },
+        "SS ISA Equal 304 (Angle-L Shape-Equal)": {
+          "20x20x3": { weight: 0.88 },
+          "25x25x3": { weight: 1.118 },
+          "30x30x3": { weight: 1.356 },
+          "40x40x3": { weight: 1.832 },
+          "40x40x5": { weight: 2.974 },
+          "50x50x5": { weight: 3.767 },
+          "50x50x6": { weight: 4.471 },
+          "60x60x6": { weight: 5.424 },
+          "65x65x6": { weight: 5.901 },
+          "75x75x6": { weight: 6.852 },
+          "75x75x8": { weight: 9.008 },
+          "90x90x8": { weight: 10.912 },
+          "100x100x8": { weight: 12.18 },
+          "100x100x10": { weight: 15.067 },
+          "100x100x12": { weight: 17.886 },
+          "125x125x10": { weight: 19.032 },
+          "150x150x12": { weight: 27.406 },
+        },
+        "MS ISA Unequal (Angle-L Shape-Unequal)": {
+          "30x20x3": { weight: 1.11 },
+          "40x25x3": { weight: 1.48 },
+          "50x30x5": { weight: 2.97 },
+          "60x40x5": { weight: 3.73 },
+          "60x40x6": { weight: 4.43 },
+          "65x50x5": { weight: 4.3 },
+          "75x50x6": { weight: 5.6 },
+          "75x50x8": { weight: 7.3 },
+          "80x60x6": { weight: 6.31 },
+          "90x60x6": { weight: 6.77 },
+          "100x65x7": { weight: 8.77 },
+          "100x75x8": { weight: 10.6 },
+          "110x70x8": { weight: 10.9 },
+          "125x75x8": { weight: 12.2 },
+          "125x95x8": { weight: 13.4 },
+          "150x115x10": { weight: 20.3 },
+          "200x150x15": { weight: 40.1 },
+        },
+        "SS ISA Unequal 304 (Angle-L Shape-Unequal)": {
+          "50x30x5": { weight: 2.974 },
+          "60x40x6": { weight: 4.471 },
+          "70x40x5": { weight: 4.163 },
+          "75x50x6": { weight: 5.662 },
+          "80x60x6": { weight: 6.376 },
+          "90x60x8": { weight: 9.008 },
+          "100x65x7": { weight: 8.771 },
+          "100x75x8": { weight: 10.594 },
+          "120x80x10": { weight: 15.067 },
+          "125x75x8": { weight: 12.18 },
+          "150x100x10": { weight: 19.032 },
+          "200x150x15": { weight: 39.848 },
+        },
+        "MS Flat": {
+          "20x3": { weight: 0.47 },
+          "20x5": { weight: 0.79 },
+          "20x6": { weight: 0.94 },
+          "25x3": { weight: 0.59 },
+          "25x5": { weight: 0.98 },
+          "25x6": { weight: 1.18 },
+          "32x3": { weight: 0.75 },
+          "32x6": { weight: 1.51 },
+          "40x5": { weight: 1.57 },
+          "40x6": { weight: 1.88 },
+          "50x5": { weight: 1.96 },
+          "50x6": { weight: 2.36 },
+          "50x8": { weight: 3.14 },
+          "50x10": { weight: 3.93 },
+          "65x6": { weight: 3.06 },
+          "65x8": { weight: 4.08 },
+          "75x6": { weight: 3.53 },
+          "75x8": { weight: 4.71 },
+          "75x10": { weight: 5.89 },
+          "100x6": { weight: 4.71 },
+          "100x8": { weight: 6.28 },
+          "100x10": { weight: 7.85 },
+          "100x12": { weight: 9.42 },
+          "125x10": { weight: 9.81 },
+          "150x10": { weight: 11.8 },
+          "150x12": { weight: 14.1 },
+        },
+        "SS Flat 304": {
+          "16x3": { weight: 0.381 },
+          "20x3": { weight: 0.476 },
+          "25x3": { weight: 0.595 },
+          "25x5": { weight: 0.991 },
+          "30x5": { weight: 1.189 },
+          "32x6": { weight: 1.523 },
+          "40x5": { weight: 1.586 },
+          "40x6": { weight: 1.903 },
+          "40x10": { weight: 3.172 },
+          "50x5": { weight: 1.983 },
+          "50x6": { weight: 2.379 },
+          "50x8": { weight: 3.172 },
+          "50x10": { weight: 3.965 },
+          "65x6": { weight: 3.093 },
+          "75x6": { weight: 3.569 },
+          "75x8": { weight: 4.758 },
+          "100x6": { weight: 4.758 },
+          "100x8": { weight: 6.344 },
+          "100x10": { weight: 7.93 },
+          "100x12": { weight: 9.516 },
+          "150x10": { weight: 11.895 },
+          "200x12": { weight: 19.032 },
+        },
+        "MS Round Bar (Solid)": {
+          6: { weight: 0.222 },
+          8: { weight: 0.395 },
+          10: { weight: 0.617 },
+          12: { weight: 0.888 },
+          16: { weight: 1.578 },
+          20: { weight: 2.466 },
+          25: { weight: 3.853 },
+          28: { weight: 4.83 },
+          32: { weight: 6.313 },
+          36: { weight: 8.0 },
+          40: { weight: 9.864 },
+          45: { weight: 12.5 },
+          50: { weight: 15.41 },
+          56: { weight: 19.3 },
+          60: { weight: 22.19 },
+          63: { weight: 24.5 },
+          71: { weight: 31.1 },
+          75: { weight: 34.68 },
+          80: { weight: 39.5 },
+          90: { weight: 49.9 },
+          100: { weight: 61.65 },
+          110: { weight: 74.6 },
+          125: { weight: 96.3 },
+          140: { weight: 120.8 },
+          160: { weight: 157.8 },
+          180: { weight: 199.8 },
+          200: { weight: 246.6 },
+        },
+        "SS Round Bar 304 (Solid)": {
+          6: { weight: 0.224 },
+          8: { weight: 0.398 },
+          10: { weight: 0.623 },
+          12: { weight: 0.897 },
+          16: { weight: 1.594 },
+          20: { weight: 2.491 },
+          25: { weight: 3.892 },
+          28: { weight: 4.882 },
+          32: { weight: 6.377 },
+          36: { weight: 8.071 },
+          40: { weight: 9.964 },
+          45: { weight: 12.603 },
+          50: { weight: 15.608 },
+          60: { weight: 22.476 },
+          75: { weight: 35.12 },
+          80: { weight: 39.852 },
+          100: { weight: 62.275 },
+          120: { weight: 89.676 },
+        },
+        "MS RHS (Pipe-Rectangular Hollow Section)": {
+          "30x20x1.5": { weight: 0.99 },
+          "40x20x2": { weight: 1.74 },
+          "50x25x2": { weight: 2.33 },
+          "50x25x3": { weight: 3.33 },
+          "60x40x2.5": { weight: 3.86 },
+          "80x40x3.2": { weight: 5.89 },
+          "100x50x3": { weight: 6.98 },
+          "100x50x5": { weight: 11.2 },
+          "120x80x4": { weight: 12.2 },
+          "150x100x5": { weight: 19.3 },
+          "160x80x6": { weight: 21.9 },
+          "200x100x5": { weight: 23.2 },
+          "200x100x8": { weight: 36.6 },
+          "250x150x8": { weight: 48.4 },
+          "300x200x10": { weight: 75.8 },
+          "350x250x12.5": { weight: 115.5 },
+          "400x200x16": { weight: 144.0 },
+        },
+        "SS RHS 304 (Pipe-Rectangular Hollow Section)": {
+          "30x15x1.5": { weight: 1.01 },
+          "40x20x2": { weight: 1.78 },
+          "50x25x2": { weight: 2.36 },
+          "50x30x2.5": { weight: 3.17 },
+          "60x40x3": { weight: 4.55 },
+          "80x40x3": { weight: 5.48 },
+          "80x40x5": { weight: 8.8 },
+          "100x50x3": { weight: 7.05 },
+          "100x50x5": { weight: 11.3 },
+          "120x60x4": { weight: 11.1 },
+          "120x80x5": { weight: 15.3 },
+          "150x100x5": { weight: 19.5 },
+          "150x100x8": { weight: 30.5 },
+          "200x100x6": { weight: 27.8 },
+        },
+        "MS SHS (Pipe-Square Hollow Section)": {
+          "20x20x2": { weight: 1.12 },
+          "20x20x2.5": { weight: 1.35 },
+          "25x25x1.5": { weight: 1.06 },
+          "25x25x2": { weight: 1.43 },
+          "25x25x2.5": { weight: 1.74 },
+          "25x25x3": { weight: 2.04 },
+          "30x30x2": { weight: 1.68 },
+          "30x30x2.5": { weight: 2.14 },
+          "30x30x3": { weight: 2.51 },
+          "40x40x2": { weight: 2.31 },
+          "40x40x2.5": { weight: 2.92 },
+          "40x40x3": { weight: 3.45 },
+          "40x40x4": { weight: 4.46 },
+          "40x40x5": { weight: 5.4 },
+          "50x50x2.5": { weight: 3.71 },
+          "50x50x3": { weight: 4.39 },
+          "50x50x4": { weight: 5.72 },
+          "50x50x5": { weight: 6.97 },
+          "60x60x3": { weight: 5.34 },
+          "60x60x4": { weight: 6.97 },
+          "60x60x5": { weight: 8.54 },
+          "60x60x6.3": { weight: 10.3 },
+          "75x75x3": { weight: 7.07 },
+          "75x75x5": { weight: 10.3 },
+          "75x75x6": { weight: 12.0 },
+          "80x80x4": { weight: 9.41 },
+          "80x80x5": { weight: 11.7 },
+          "80x80x6": { weight: 13.9 },
+          "80x80x8": { weight: 17.5 },
+          "90x90x5": { weight: 13.3 },
+          "90x90x6.3": { weight: 16.2 },
+          "100x100x4": { weight: 12.0 },
+          "100x100x5": { weight: 14.8 },
+          "100x100x6.3": { weight: 18.2 },
+          "100x100x8": { weight: 22.9 },
+          "100x100x10": { weight: 27.9 },
+          "120x120x5": { weight: 18.0 },
+          "120x120x6.3": { weight: 22.3 },
+          "120x120x8": { weight: 27.9 },
+          "120x120x10": { weight: 34.2 },
+          "140x140x6.3": { weight: 26.3 },
+          "140x140x8": { weight: 32.9 },
+          "150x150x5": { weight: 22.7 },
+          "150x150x8": { weight: 35.4 },
+          "150x150x10": { weight: 43.6 },
+          "150x150x12.5": { weight: 53.4 },
+          "180x180x6.3": { weight: 34.2 },
+          "180x180x8": { weight: 43.0 },
+          "200x200x6.3": { weight: 38.2 },
+          "200x200x8": { weight: 48.0 },
+          "200x200x10": { weight: 59.3 },
+          "250x250x8": { weight: 60.5 },
+          "250x250x10": { weight: 75.0 },
+          "300x300x8": { weight: 73.1 },
+          "300x300x10": { weight: 90.7 },
+          "350x350x10": { weight: 106.0 },
+          "400x400x12": { weight: 141.0 },
+        },
+        "SS SHS 304 (Pipe-Square Hollow Section)": {
+          "20x20x1.5": { weight: 0.931 },
+          "25x25x2": { weight: 1.459 },
+          "40x40x2": { weight: 2.411 },
+          "40x40x3": { weight: 3.569 },
+          "50x50x3": { weight: 4.471 },
+          "60x60x3": { weight: 5.424 },
+          "60x60x5": { weight: 8.771 },
+          "80x80x4": { weight: 9.643 },
+          "80x80x5": { weight: 11.979 },
+          "100x100x5": { weight: 15.067 },
+          "100x100x6": { weight: 17.886 },
+          "120x120x6": { weight: 21.696 },
+          "120x120x8": { weight: 28.548 },
+          "150x150x6": { weight: 27.406 },
+        },
+        "MS CHS (Pipe-Circular Hollow Section)": {
+          "21.3x2.0": { weight: 1.0 },
+          "21.3x2.3": { weight: 1.12 },
+          "21.3x3.2": { weight: 1.4 },
+          "26.9x2.3": { weight: 1.44 },
+          "26.9x3.2": { weight: 1.9 },
+          "33.7x2.6": { weight: 2.0 },
+          "33.7x3.2": { weight: 2.4 },
+          "33.7x4.0": { weight: 2.9 },
+          "42.4x2.6": { weight: 2.6 },
+          "42.4x3.2": { weight: 3.1 },
+          "42.4x4.0": { weight: 3.8 },
+          "48.3x2.9": { weight: 3.44 },
+          "48.3x3.2": { weight: 3.6 },
+          "48.3x5.0": { weight: 5.3 },
+          "60.3x2.9": { weight: 4.37 },
+          "60.3x3.2": { weight: 4.5 },
+          "60.3x4.0": { weight: 5.6 },
+          "60.3x5.0": { weight: 6.8 },
+          "76.1x3.2": { weight: 5.8 },
+          "76.1x4.0": { weight: 7.1 },
+          "76.1x5.0": { weight: 8.8 },
+          "88.9x3.2": { weight: 6.8 },
+          "88.9x4.0": { weight: 8.4 },
+          "88.9x5.0": { weight: 10.3 },
+          "101.6x3.6": { weight: 8.7 },
+          "101.6x5.0": { weight: 11.9 },
+          "101.6x6.3": { weight: 14.8 },
+          "114.3x3.6": { weight: 9.8 },
+          "114.3x4.0": { weight: 11.4 },
+          "114.3x5.0": { weight: 13.5 },
+          "139.7x4.5": { weight: 15.9 },
+          "139.7x5.0": { weight: 16.6 },
+          "139.7x6.3": { weight: 20.7 },
+          "168.3x4.5": { weight: 19.3 },
+          "168.3x5.0": { weight: 20.1 },
+          "168.3x6.3": { weight: 25.2 },
+          "168.3x8.0": { weight: 31.6 },
+          "193.7x5.0": { weight: 23.3 },
+          "193.7x6.3": { weight: 29.1 },
+          "193.7x8.0": { weight: 36.6 },
+          "219.1x5.0": { weight: 26.4 },
+          "219.1x6.3": { weight: 33.1 },
+          "219.1x8.0": { weight: 41.6 },
+          "273.0x6.3": { weight: 41.4 },
+          "273.0x8.0": { weight: 52.3 },
+          "273.0x10.0": { weight: 64.9 },
+          "323.9x8.0": { weight: 62.3 },
+          "323.9x10.0": { weight: 77.4 },
+          "355.6x10.0": { weight: 85.2 },
+          "406.4x12.5": { weight: 121.0 },
+        },
+        "SS CHS 304 (Pipe-Circular Hollow Section)": {
+          "17.2x1.6": { weight: 0.654 },
+          "21.3x2.0": { weight: 0.966 },
+          "26.9x2.0": { weight: 1.24 },
+          "33.7x2.0": { weight: 1.564 },
+          "33.7x2.3": { weight: 1.801 },
+          "42.4x2.3": { weight: 2.296 },
+          "48.3x2.0": { weight: 2.399 },
+          "48.3x2.6": { weight: 2.969 },
+          "60.3x2.6": { weight: 3.757 },
+          "60.3x3.0": { weight: 4.321 },
+          "76.1x2.9": { weight: 5.266 },
+          "76.1x4.0": { weight: 7.152 },
+          "88.9x3.0": { weight: 6.269 },
+          "88.9x4.0": { weight: 8.297 },
+          "114.3x3.6": { weight: 9.929 },
+          "139.7x4.0": { weight: 13.528 },
+          "168.3x4.5": { weight: 18.361 },
+        },
+        "MS Plate": {
+          "3mm": { weight: 23.55, thickness: 3, density: 7850 },
+          "4mm": { weight: 31.4, thickness: 4, density: 7850 },
+          "6mm": { weight: 47.1, thickness: 6, density: 7850 },
+          "8mm": { weight: 62.8, thickness: 8, density: 7850 },
+          "10mm": { weight: 78.5, thickness: 10, density: 7850 },
+          "12mm": { weight: 94.2, thickness: 12, density: 7850 },
+          "16mm": { weight: 125.6, thickness: 16, density: 7850 },
+          "20mm": { weight: 157.0, thickness: 20, density: 7850 },
+          "25mm": { weight: 196.25, thickness: 25, density: 7850 },
+          "32mm": { weight: 251.2, thickness: 32, density: 7850 },
+          "40mm": { weight: 314.0, thickness: 40, density: 7850 },
+          "50mm": { weight: 392.5, thickness: 50, density: 7850 },
+          "60mm": { weight: 471.0, thickness: 60, density: 7850 },
+          "80mm": { weight: 628.0, thickness: 80, density: 7850 },
+          "100mm": { weight: 785.0, thickness: 100, density: 7850 },
+        },
+        "SS Plate 304": {
+          "3mm": { weight: 23.79, thickness: 3, density: 7930 },
+          "4mm": { weight: 31.72, thickness: 4, density: 7930 },
+          "6mm": { weight: 47.58, thickness: 6, density: 7930 },
+          "8mm": { weight: 63.44, thickness: 8, density: 7930 },
+          "10mm": { weight: 79.3, thickness: 10, density: 7930 },
+          "12mm": { weight: 95.16, thickness: 12, density: 7930 },
+          "16mm": { weight: 126.88, thickness: 16, density: 7930 },
+          "20mm": { weight: 158.6, thickness: 20, density: 7930 },
+          "25mm": { weight: 198.25, thickness: 25, density: 7930 },
+          "32mm": { weight: 253.76, thickness: 32, density: 7930 },
+          "40mm": { weight: 317.2, thickness: 40, density: 7930 },
+          "50mm": { weight: 396.5, thickness: 50, density: 7930 },
+          "60mm": { weight: 475.8, thickness: 60, density: 7930 },
+          "80mm": { weight: 634.4, thickness: 80, density: 7930 },
+          "100mm": { weight: 793.0, thickness: 100, density: 7930 },
+        },
+        "SS Plate 316": {
+          "3mm": { weight: 23.94, thickness: 3, density: 7980 },
+          "4mm": { weight: 31.92, thickness: 4, density: 7980 },
+          "6mm": { weight: 47.88, thickness: 6, density: 7980 },
+          "8mm": { weight: 63.84, thickness: 8, density: 7980 },
+          "10mm": { weight: 79.8, thickness: 10, density: 7980 },
+          "12mm": { weight: 95.76, thickness: 12, density: 7980 },
+          "16mm": { weight: 127.68, thickness: 16, density: 7980 },
+          "20mm": { weight: 159.6, thickness: 20, density: 7980 },
+          "25mm": { weight: 199.5, thickness: 25, density: 7980 },
+          "32mm": { weight: 255.36, thickness: 32, density: 7980 },
+          "40mm": { weight: 319.2, thickness: 40, density: 7980 },
+          "50mm": { weight: 399.0, thickness: 50, density: 7980 },
+          "60mm": { weight: 478.8, thickness: 60, density: 7980 },
+          "80mm": { weight: 638.4, thickness: 80, density: 7980 },
+          "100mm": { weight: 798.0, thickness: 100, density: 7980 },
+        },
+        "MS Chequered Plate": {
+          "3mm": { weight: 26.55, thickness: 3, density: 7850 },
+          "4mm": { weight: 34.4, thickness: 4, density: 7850 },
+          "5mm": { weight: 42.25, thickness: 5, density: 7850 },
+          "6mm": { weight: 50.1, thickness: 6, density: 7850 },
+          "8mm": { weight: 65.8, thickness: 8, density: 7850 },
+          "10mm": { weight: 83.4, thickness: 10, density: 7850 },
+          "12mm": { weight: 100.6, thickness: 12, density: 7850 },
+          "14mm": { weight: 117.8, thickness: 14, density: 7850 },
+          "16mm": { weight: 134.4, thickness: 16, density: 7850 },
+          "20mm": { weight: 168.0, thickness: 20, density: 7850 },
+          "25mm": { weight: 212.5, thickness: 25, density: 7850 },
+        },
+        "MS Sheet": {
+          "0.4mm / 26Ga": { weight: 3.14, thickness: 0.4, density: 7850 },
+          "0.5mm / 25Ga": { weight: 3.93, thickness: 0.5, density: 7850 },
+          "0.63mm / 24Ga": { weight: 4.95, thickness: 0.63, density: 7850 },
+          "0.71mm / 22Ga": { weight: 5.57, thickness: 0.71, density: 7850 },
+          "0.8mm / 22Ga": { weight: 6.28, thickness: 0.8, density: 7850 },
+          "0.9mm / 20Ga": { weight: 7.07, thickness: 0.9, density: 7850 },
+          "1.0mm / 19Ga": { weight: 7.85, thickness: 1.0, density: 7850 },
+          "1.2mm / 18Ga": { weight: 9.42, thickness: 1.2, density: 7850 },
+          "1.5mm / 16Ga": { weight: 11.78, thickness: 1.5, density: 7850 },
+          "1.6mm / 16Ga": { weight: 12.56, thickness: 1.6, density: 7850 },
+          "2.0mm / 14Ga": { weight: 15.7, thickness: 2.0, density: 7850 },
+          "2.5mm / 12Ga": { weight: 19.63, thickness: 2.5, density: 7850 },
+          "3.0mm / 11Ga": { weight: 23.55, thickness: 3.0, density: 7850 },
+          "3.15mm / 11Ga": { weight: 24.73, thickness: 3.15, density: 7850 },
+          "4.0mm / 8Ga": { weight: 31.4, thickness: 4.0, density: 7850 },
+          "5.0mm / 6Ga": { weight: 39.25, thickness: 5.0, density: 7850 },
+          "6.0mm / 4Ga": { weight: 47.1, thickness: 6.0, density: 7850 },
+        },
+        "SS Sheet 304": {
+          "0.4mm / 26Ga": { weight: 3.17, thickness: 0.4, density: 7930 },
+          "0.5mm / 25Ga": { weight: 3.97, thickness: 0.5, density: 7930 },
+          "0.7mm / 22Ga": { weight: 5.55, thickness: 0.7, density: 7930 },
+          "0.8mm / 22Ga": { weight: 6.34, thickness: 0.8, density: 7930 },
+          "1.0mm / 19Ga": { weight: 7.93, thickness: 1.0, density: 7930 },
+          "1.2mm / 18Ga": { weight: 9.52, thickness: 1.2, density: 7930 },
+          "1.5mm / 16Ga": { weight: 11.9, thickness: 1.5, density: 7930 },
+          "2.0mm / 14Ga": { weight: 15.86, thickness: 2.0, density: 7930 },
+          "2.5mm / 12Ga": { weight: 19.83, thickness: 2.5, density: 7930 },
+          "3.0mm / 11Ga": { weight: 23.79, thickness: 3.0, density: 7930 },
+          "4.0mm / 8Ga": { weight: 31.72, thickness: 4.0, density: 7930 },
+          "5.0mm / 6Ga": { weight: 39.65, thickness: 5.0, density: 7930 },
+          "6.0mm / 4Ga": { weight: 47.58, thickness: 6.0, density: 7930 },
+        },
+        "SS Sheet 316": {
+          "0.4mm / 26Ga": { weight: 3.19, thickness: 0.4, density: 7980 },
+          "0.5mm / 25Ga": { weight: 3.99, thickness: 0.5, density: 7980 },
+          "0.7mm / 22Ga": { weight: 5.59, thickness: 0.7, density: 7980 },
+          "0.8mm / 22Ga": { weight: 6.38, thickness: 0.8, density: 7980 },
+          "1.0mm / 19Ga": { weight: 7.98, thickness: 1.0, density: 7980 },
+          "1.2mm / 18Ga": { weight: 9.58, thickness: 1.2, density: 7980 },
+          "1.5mm / 16Ga": { weight: 11.97, thickness: 1.5, density: 7980 },
+          "2.0mm / 14Ga": { weight: 15.96, thickness: 2.0, density: 7980 },
+          "2.5mm / 12Ga": { weight: 19.95, thickness: 2.5, density: 7980 },
+          "3.0mm / 11Ga": { weight: 23.94, thickness: 3.0, density: 7980 },
+          "4.0mm / 8Ga": { weight: 31.92, thickness: 4.0, density: 7980 },
+          "5.0mm / 6Ga": { weight: 39.9, thickness: 5.0, density: 7980 },
+          "6.0mm / 4Ga": { weight: 47.88, thickness: 6.0, density: 7980 },
+        },
+        "MS Galvanized Sheet": {
+          "0.4mm / 28Ga": { weight: 3.14, thickness: 0.4, density: 7850 },
+          "0.5mm / 26Ga": { weight: 3.93, thickness: 0.5, density: 7850 },
+          "0.63mm / 24Ga": { weight: 4.95, thickness: 0.63, density: 7850 },
+          "0.71mm / 24Ga": { weight: 5.57, thickness: 0.71, density: 7850 },
+          "0.8mm / 22Ga": { weight: 6.28, thickness: 0.8, density: 7850 },
+          "0.9mm / 20Ga": { weight: 7.07, thickness: 0.9, density: 7850 },
+          "1.0mm / 20Ga": { weight: 7.85, thickness: 1.0, density: 7850 },
+          "1.2mm / 18Ga": { weight: 9.42, thickness: 1.2, density: 7850 },
+          "1.5mm / 16Ga": { weight: 11.78, thickness: 1.5, density: 7850 },
+          "1.6mm / 16Ga": { weight: 12.56, thickness: 1.6, density: 7850 },
+          "2.0mm / 14Ga": { weight: 15.7, thickness: 2.0, density: 7850 },
+          "2.5mm / 12Ga": { weight: 19.63, thickness: 2.5, density: 7850 },
+          "3.0mm / 11Ga": { weight: 23.55, thickness: 3.0, density: 7850 },
+        },
+        "MS ISJB (Beam-H Shape-Junior)": {
+          150: { weight: 7.1, depth: 150, width: 50 },
+          175: { weight: 8.1, depth: 175, width: 50 },
+          200: { weight: 9.9, depth: 200, width: 60 },
+          225: { weight: 12.8, depth: 225, width: 80 },
+          250: { weight: 14.1, depth: 250, width: 80 },
+          300: { weight: 17.2, depth: 300, width: 100 },
+        },
+        "SS ISJB 304 (Beam-H Shape-Junior)": {
+          150: { weight: 7.17, depth: 150, width: 50 },
+          175: { weight: 8.18, depth: 175, width: 50 },
+          200: { weight: 10.0, depth: 200, width: 60 },
+          225: { weight: 12.93, depth: 225, width: 80 },
+          250: { weight: 14.24, depth: 250, width: 80 },
+          300: { weight: 17.38, depth: 300, width: 100 },
+        },
+        "MS ISLB (Beam-H Shape-Light)": {
+          75: { weight: 4.6, depth: 75, width: 40 },
+          100: { weight: 6.8, depth: 100, width: 45 },
+          125: { weight: 10.2, depth: 125, width: 64 },
+          150: { weight: 12.5, depth: 150, width: 75 },
+          175: { weight: 16.7, depth: 175, width: 85 },
+          200: { weight: 19.8, depth: 200, width: 90 },
+          225: { weight: 23.8, depth: 225, width: 100 },
+          250: { weight: 27.9, depth: 250, width: 110 },
+          275: { weight: 32.2, depth: 275, width: 120 },
+          300: { weight: 37.7, depth: 300, width: 140 },
+          325: { weight: 43.1, depth: 325, width: 140 },
+          350: { weight: 48.6, depth: 350, width: 140 },
+          400: { weight: 56.9, depth: 400, width: 140 },
+          450: { weight: 65.3, depth: 450, width: 150 },
+          500: { weight: 75.0, depth: 500, width: 180 },
+          550: { weight: 86.3, depth: 550, width: 190 },
+          600: { weight: 99.5, depth: 600, width: 210 },
+        },
+        "SS ISLB 304 (Beam-H Shape-Light)": {
+          75: { weight: 4.65, depth: 75, width: 40 },
+          100: { weight: 6.87, depth: 100, width: 45 },
+          125: { weight: 10.3, depth: 125, width: 64 },
+          150: { weight: 12.63, depth: 150, width: 75 },
+          175: { weight: 16.87, depth: 175, width: 85 },
+          200: { weight: 20.0, depth: 200, width: 90 },
+          225: { weight: 24.0, depth: 225, width: 100 },
+          250: { weight: 28.18, depth: 250, width: 110 },
+          275: { weight: 32.52, depth: 275, width: 120 },
+          300: { weight: 38.08, depth: 300, width: 140 },
+          325: { weight: 43.53, depth: 325, width: 140 },
+          350: { weight: 49.1, depth: 350, width: 140 },
+          400: { weight: 57.5, depth: 400, width: 140 },
+          450: { weight: 66.0, depth: 450, width: 150 },
+          500: { weight: 75.75, depth: 500, width: 180 },
+          550: { weight: 87.2, depth: 550, width: 190 },
+          600: { weight: 100.5, depth: 600, width: 210 },
+        },
+        "MS ISMB (Beam-H Shape-Medium)": {
+          100: { weight: 8.9, depth: 100, width: 50 },
+          125: { weight: 13.3, depth: 125, width: 70 },
+          150: { weight: 14.9, depth: 150, width: 75 },
+          175: { weight: 19.6, depth: 175, width: 85 },
+          200: { weight: 25.4, depth: 200, width: 100 },
+          225: { weight: 31.1, depth: 225, width: 110 },
+          250: { weight: 37.3, depth: 250, width: 125 },
+          300: { weight: 46.1, depth: 300, width: 140 },
+          350: { weight: 52.4, depth: 350, width: 140 },
+          400: { weight: 61.3, depth: 400, width: 140 },
+          450: { weight: 72.4, depth: 450, width: 150 },
+          500: { weight: 86.9, depth: 500, width: 180 },
+          550: { weight: 103.7, depth: 550, width: 190 },
+          600: { weight: 122.6, depth: 600, width: 210 },
+        },
+        "SS ISMB 304 (Beam-H Shape-Medium)": {
+          100: { weight: 9.0, depth: 100, width: 50 },
+          125: { weight: 13.43, depth: 125, width: 70 },
+          150: { weight: 15.05, depth: 150, width: 75 },
+          175: { weight: 19.8, depth: 175, width: 85 },
+          200: { weight: 25.65, depth: 200, width: 100 },
+          225: { weight: 31.4, depth: 225, width: 110 },
+          250: { weight: 37.7, depth: 250, width: 125 },
+          300: { weight: 46.56, depth: 300, width: 140 },
+          350: { weight: 52.9, depth: 350, width: 140 },
+          400: { weight: 61.9, depth: 400, width: 140 },
+          450: { weight: 73.1, depth: 450, width: 150 },
+          500: { weight: 87.8, depth: 500, width: 180 },
+          550: { weight: 104.7, depth: 550, width: 190 },
+          600: { weight: 123.8, depth: 600, width: 210 },
+        },
+        "MS ISWB (Beam-H Shape-Wide Flange)": {
+          150: { weight: 14.3, depth: 150, width: 80 },
+          175: { weight: 17.0, depth: 175, width: 85 },
+          200: { weight: 21.9, depth: 200, width: 90 },
+          225: { weight: 27.0, depth: 225, width: 100 },
+          250: { weight: 33.3, depth: 250, width: 125 },
+          300: { weight: 43.6, depth: 300, width: 140 },
+          350: { weight: 56.9, depth: 350, width: 165 },
+          400: { weight: 66.7, depth: 400, width: 165 },
+          450: { weight: 79.4, depth: 450, width: 200 },
+          500: { weight: 95.2, depth: 500, width: 200 },
+          550: { weight: 112.5, depth: 550, width: 250 },
+          600: { weight: 133.7, depth: 600, width: 250 },
+        },
+        "SS ISWB 304 (Beam-H Shape-Wide Flange)": {
+          150: { weight: 14.44, depth: 150, width: 80 },
+          175: { weight: 17.17, depth: 175, width: 85 },
+          200: { weight: 22.1, depth: 200, width: 90 },
+          225: { weight: 27.3, depth: 225, width: 100 },
+          250: { weight: 33.6, depth: 250, width: 125 },
+          300: { weight: 44.0, depth: 300, width: 140 },
+          350: { weight: 57.5, depth: 350, width: 165 },
+          400: { weight: 67.4, depth: 400, width: 165 },
+          450: { weight: 80.2, depth: 450, width: 200 },
+          500: { weight: 96.15, depth: 500, width: 200 },
+          550: { weight: 113.6, depth: 550, width: 250 },
+          600: { weight: 135.0, depth: 600, width: 250 },
+        },
+        "MS ISHB (Beam-H Shape-Heavy)": {
+          "100_col": {
+            weight: 21.6,
+            depth: 100,
+            width: 100,
+            note: "ISHB 100 Column",
+          },
+          "150_min": {
+            weight: 27.1,
+            depth: 150,
+            width: 150,
+            note: "ISHB 150, minimum weight variant (Column)",
+          },
+          "150_med": {
+            weight: 30.6,
+            depth: 150,
+            width: 150,
+            note: "ISHB 150, medium weight variant (Beam)",
+          },
+          "150_max": {
+            weight: 34.6,
+            depth: 150,
+            width: 150,
+            note: "ISHB 150, maximum weight variant (Column)",
+          },
+          "200_min": {
+            weight: 37.3,
+            depth: 200,
+            width: 200,
+            note: "ISHB 200, minimum weight variant (Column)",
+          },
+          "200_med": {
+            weight: 40.0,
+            depth: 200,
+            width: 200,
+            note: "ISHB 200, medium weight variant (Beam)",
+          },
+          "200_max": {
+            weight: 44.2,
+            depth: 200,
+            width: 200,
+            note: "ISHB 200, maximum weight variant (Column)",
+          },
+          "250_min": {
+            weight: 51.0,
+            depth: 250,
+            width: 250,
+            note: "ISHB 250, minimum weight variant (Column)",
+          },
+          "250_med": {
+            weight: 54.7,
+            depth: 250,
+            width: 250,
+            note: "ISHB 250, medium weight variant (Beam)",
+          },
+          "250_max": {
+            weight: 62.8,
+            depth: 250,
+            width: 250,
+            note: "ISHB 250, maximum weight variant (Column)",
+          },
+          "300_min": {
+            weight: 61.3,
+            depth: 300,
+            width: 250,
+            note: "ISHB 300, minimum weight variant (Beam/Column)",
+          },
+          "300_med": {
+            weight: 63.0,
+            depth: 300,
+            width: 250,
+            note: "ISHB 300, medium weight variant (Beam)",
+          },
+          "300_max": {
+            weight: 79.4,
+            depth: 300,
+            width: 250,
+            note: "ISHB 300, maximum weight variant (Column)",
+          },
+          "350_min": {
+            weight: 71.0,
+            depth: 350,
+            width: 250,
+            note: "ISHB 350, minimum weight variant (Beam/Column)",
+          },
+          "350_med": {
+            weight: 72.4,
+            depth: 350,
+            width: 250,
+            note: "ISHB 350, medium weight variant (Beam)",
+          },
+          "350_max": {
+            weight: 90.7,
+            depth: 350,
+            width: 250,
+            note: "ISHB 350, maximum weight variant (Column)",
+          },
+          "400_min": {
+            weight: 77.4,
+            depth: 400,
+            width: 250,
+            note: "ISHB 400, minimum weight variant (Beam/Column)",
+          },
+          "400_med": {
+            weight: 82.2,
+            depth: 400,
+            width: 250,
+            note: "ISHB 400, medium weight variant (Beam)",
+          },
+          "400_max": {
+            weight: 98.6,
+            depth: 400,
+            width: 250,
+            note: "ISHB 400, maximum weight variant (Column)",
+          },
+          "450_min": {
+            weight: 84.6,
+            depth: 450,
+            width: 250,
+            note: "ISHB 450, minimum weight variant (Beam/Column)",
+          },
+          "450_med": {
+            weight: 87.2,
+            depth: 450,
+            width: 250,
+            note: "ISHB 450, medium weight variant (Beam)",
+          },
+          "450_max": {
+            weight: 105.1,
+            depth: 450,
+            width: 250,
+            note: "ISHB 450, maximum weight variant (Column)",
+          },
+          "500_min": {
+            weight: 93.9,
+            depth: 500,
+            width: 250,
+            note: "ISHB 500, minimum weight variant (Beam/Column)",
+          },
+          "500_med": {
+            weight: 95.2,
+            depth: 500,
+            width: 250,
+            note: "ISHB 500, medium weight variant (Beam)",
+          },
+          "500_max": {
+            weight: 116.8,
+            depth: 500,
+            width: 250,
+            note: "ISHB 500, maximum weight variant (Column)",
+          },
+          "550_min": {
+            weight: 103.9,
+            depth: 550,
+            width: 250,
+            note: "ISHB 550, minimum weight variant (Beam/Column)",
+          },
+          "550_med": {
+            weight: 105.1,
+            depth: 550,
+            width: 250,
+            note: "ISHB 550, medium weight variant (Beam)",
+          },
+          "550_max": {
+            weight: 130.1,
+            depth: 550,
+            width: 250,
+            note: "ISHB 550, maximum weight variant (Column)",
+          },
+          "600_min": {
+            weight: 124.9,
+            depth: 600,
+            width: 250,
+            note: "ISHB 600, minimum weight variant (Beam/Column)",
+          },
+          "600_med": {
+            weight: 133.7,
+            depth: 600,
+            width: 250,
+            note: "ISHB 600, medium weight variant (Beam)",
+          },
+          "600_max": {
+            weight: 168.0,
+            depth: 600,
+            width: 250,
+            note: "ISHB 600, maximum weight variant (Column)",
+          },
+        },
+        "SS ISHB 304 (Beam-H Shape-Heavy)": {
+          "100_col": { weight: 21.8, depth: 100, width: 100 },
+          "150_min": { weight: 27.37, depth: 150, width: 150 },
+          "150_med": { weight: 30.9, depth: 150, width: 150 },
+          "150_max": { weight: 34.95, depth: 150, width: 150 },
+          "200_min": { weight: 37.7, depth: 200, width: 200 },
+          "200_med": { weight: 40.4, depth: 200, width: 200 },
+          "200_max": { weight: 44.7, depth: 200, width: 200 },
+          "250_min": { weight: 51.5, depth: 250, width: 250 },
+          "250_med": { weight: 55.25, depth: 250, width: 250 },
+          "250_max": { weight: 63.4, depth: 250, width: 250 },
+          "300_min": { weight: 61.9, depth: 300, width: 250 },
+          "300_med": { weight: 63.6, depth: 300, width: 250 },
+          "300_max": { weight: 80.2, depth: 300, width: 250 },
+          "350_min": { weight: 71.7, depth: 350, width: 250 },
+          "350_med": { weight: 73.1, depth: 350, width: 250 },
+          "350_max": { weight: 91.6, depth: 350, width: 250 },
+          "400_min": { weight: 78.2, depth: 400, width: 250 },
+          "400_med": { weight: 83.0, depth: 400, width: 250 },
+          "400_max": { weight: 99.6, depth: 400, width: 250 },
+          "450_min": { weight: 85.5, depth: 450, width: 250 },
+          "450_med": { weight: 88.1, depth: 450, width: 250 },
+          "450_max": { weight: 106.1, depth: 450, width: 250 },
+          "500_min": { weight: 94.8, depth: 500, width: 250 },
+          "500_med": { weight: 96.15, depth: 500, width: 250 },
+          "500_max": { weight: 118.0, depth: 500, width: 250 },
+          "550_min": { weight: 104.9, depth: 550, width: 250 },
+          "550_med": { weight: 106.1, depth: 550, width: 250 },
+          "550_max": { weight: 131.4, depth: 550, width: 250 },
+          "600_min": { weight: 126.1, depth: 600, width: 250 },
+          "600_med": { weight: 135.0, depth: 600, width: 250 },
+          "600_max": { weight: 169.6, depth: 600, width: 250 },
+        },
+        "MS ISJC (Channel-C Shape-Junior)": {
+          75: { weight: 6.8, depth: 75, width: 40 },
+          100: { weight: 7.9, depth: 100, width: 45 },
+          125: { weight: 10.7, depth: 125, width: 58 },
+          150: { weight: 13.9, depth: 150, width: 75 },
+          175: { weight: 16.7, depth: 175, width: 75 },
+          200: { weight: 19.8, depth: 200, width: 75 },
+          225: { weight: 24.5, depth: 225, width: 80 },
+          250: { weight: 28.5, depth: 250, width: 80 },
+          300: { weight: 33.1, depth: 300, width: 90 },
+          350: { weight: 41.8, depth: 350, width: 100 },
+          400: { weight: 47.7, depth: 400, width: 100 },
+        },
+        "SS ISJC 304 (Channel-C Shape-Junior)": {
+          75: { weight: 6.87, depth: 75, width: 40 },
+          100: { weight: 8.06, depth: 100, width: 45 },
+          125: { weight: 10.8, depth: 125, width: 58 },
+          150: { weight: 14.04, depth: 150, width: 75 },
+          200: { weight: 20.0, depth: 200, width: 75 },
+          250: { weight: 28.8, depth: 250, width: 80 },
+          300: { weight: 37.5, depth: 300, width: 90 },
+          400: { weight: 56.8, depth: 400, width: 100 },
+        },
+        "MS ISLC (Channel-C Shape-Lightweight)": {
+          75: { weight: 6.8, depth: 75, width: 40 },
+          100: { weight: 7.9, depth: 100, width: 45 },
+          125: { weight: 10.7, depth: 125, width: 58 },
+          150: { weight: 13.9, depth: 150, width: 75 },
+          175: { weight: 16.7, depth: 175, width: 75 },
+          200: { weight: 19.8, depth: 200, width: 75 },
+          225: { weight: 24.5, depth: 225, width: 80 },
+          250: { weight: 28.5, depth: 250, width: 80 },
+          300: { weight: 33.1, depth: 300, width: 90 },
+          350: { weight: 41.8, depth: 350, width: 100 },
+          400: { weight: 47.7, depth: 400, width: 100 },
+        },
+        "SS ISLC 304 (Channel-C Shape-Lightweight)": {
+          75: { weight: 6.87, depth: 75, width: 40 },
+          100: { weight: 7.98, depth: 100, width: 45 },
+          125: { weight: 10.8, depth: 125, width: 58 },
+          150: { weight: 14.04, depth: 150, width: 75 },
+          175: { weight: 16.87, depth: 175, width: 75 },
+          200: { weight: 20.0, depth: 200, width: 75 },
+          225: { weight: 24.75, depth: 225, width: 80 },
+          250: { weight: 28.8, depth: 250, width: 80 },
+          300: { weight: 33.43, depth: 300, width: 90 },
+          350: { weight: 42.2, depth: 350, width: 100 },
+          400: { weight: 48.2, depth: 400, width: 100 },
+        },
+        "MS ISMC (Channel-C Shape-Medium)": {
+          75: { weight: 7.14, depth: 75, width: 40 },
+          100: { weight: 9.56, depth: 100, width: 50 },
+          125: { weight: 13.1, depth: 125, width: 65 },
+          150: { weight: 16.8, depth: 150, width: 75 },
+          175: { weight: 19.6, depth: 175, width: 75 },
+          200: { weight: 22.3, depth: 200, width: 75 },
+          225: { weight: 26.1, depth: 225, width: 80 },
+          250: { weight: 31.1, depth: 250, width: 80 },
+          300: { weight: 36.3, depth: 300, width: 90 },
+          350: { weight: 41.8, depth: 350, width: 100 },
+          400: { weight: 50.1, depth: 400, width: 100 },
+        },
+        "SS ISMC 304 (Channel-C Shape-Medium)": {
+          75: { weight: 7.21, depth: 75, width: 40 },
+          100: { weight: 9.66, depth: 100, width: 50 },
+          125: { weight: 13.23, depth: 125, width: 65 },
+          150: { weight: 16.96, depth: 150, width: 75 },
+          175: { weight: 19.8, depth: 175, width: 75 },
+          200: { weight: 22.5, depth: 200, width: 75 },
+          225: { weight: 26.36, depth: 225, width: 80 },
+          250: { weight: 31.4, depth: 250, width: 80 },
+          300: { weight: 36.66, depth: 300, width: 90 },
+          350: { weight: 42.2, depth: 350, width: 100 },
+          400: { weight: 50.6, depth: 400, width: 100 },
+        },
+        "Custom Materials (Per Unit)": {},
+        "Custom Materials (Per Kg)": {},
+      };
+
+      let items = [];
+      let itemCounter = 0;
+
+      // Initialize first item
+      function init() {
+        addItem();
+      }
+
+      // Add new item
+      // Add new item
+      function addItem() {
+        itemCounter++;
+        const itemId = itemCounter;
+
+        items.push({
+          id: itemId,
+          materialType: "",
+          sectionSize: "",
+          length: "",
+          width: "",
+          lengthUnit: "meter",
+          quantity: "",
+          costPerKg: "",
+          costPerUnit: "",
+          customDescription: "",
+          weightinKg: "",
+          notes: "",
+        });
+
+        renderItems();
+      }
+
+      // Remove item
+      function removeItem(id) {
+        if (items.length > 1) {
+          items = items.filter((item) => item.id !== id);
+          renderItems();
+        }
+      }
+
+      // Update item field
+      function updateItem(id, field, value) {
+        const item = items.find((item) => item.id === id);
+        if (item) {
+          item[field] = value;
+          if (field === "materialType") {
+            item.sectionSize = "";
+            renderItems();
+          }
+        }
+      }
+
+      // Render all items
+      function renderItems() {
+        const container = document.getElementById("items-container");
+        container.innerHTML = "";
+
+        items.forEach((item, index) => {
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "item-container";
+          itemDiv.innerHTML = `
+                    <div class="item-header">
+                        <h3>Item ${index + 1}</h3>
+                        ${
+                          items.length > 1
+                            ? `<button class="remove-btn" onclick="removeItem(${item.id})">🗑️ Remove</button>`
+                            : ""
+                        }
+                    </div>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Material Type *</label>
+                            <select onchange="updateItem(${
+                              item.id
+                            }, 'materialType', this.value)">
+                                <option value="">Select Material</option>
+                                ${Object.keys(steelDatabase)
+                                  .map(
+                                    (type) =>
+                                      `<option value="${type}" ${
+                                        item.materialType === type
+                                          ? "selected"
+                                          : ""
+                                      }>${type}</option>`
+                                  )
+                                  .join("")}
+                            </select>
+                        </div>
+
+                          
+                        ${
+                          [
+                            "Custom Materials (Per Unit)",
+                            "Custom Materials (Per Kg)",
+                          ].includes(item.materialType)
+                            ? `
+                        <div class="input-group">
+                            <label>Material Description *</label>
+                            <input type="text" placeholder="e.g., Cement Bag, Welding Rod, Paint" 
+                            value="${item.customDescription || ""}" 
+                            oninput="updateItem(${
+                              item.id
+                            }, 'customDescription', this.value)">
+                        </div>
+                        `
+                            : ""
+                        }
+                        
+                        ${
+                          item.materialType === "Custom Materials (Per Kg)"
+                            ? `
+                          <div class="input-group">
+                              <label>Weight (Kg) *</label>
+                              <input type="number" step="0.01" placeholder="e.g., 50.00" 
+                              value="${item.weightinKg || ""}" 
+                              oninput="updateItem(${
+                                item.id
+                              }, 'weightinKg', this.value)">
+                          </div>
+                          `
+                            : ""
+                        }
+                          
+                        ${
+                          ![
+                            "Custom Materials (Per Unit)",
+                            "Custom Materials (Per Kg)",
+                          ].includes(item.materialType)
+                            ? `
+                        <div class="input-group">
+                            <label>Section Size *</label>
+                            <select onchange="updateItem(${
+                              item.id
+                            }, 'sectionSize', this.value)" ${
+                                !item.materialType ? "disabled" : ""
+                              }>
+                                <option value="">Select Size</option>
+                                ${
+                                  item.materialType
+                                    ? Object.keys(
+                                        steelDatabase[item.materialType]
+                                      )
+                                        .map(
+                                          (size) =>
+                                            `<option value="${size}" ${
+                                              item.sectionSize === size
+                                                ? "selected"
+                                                : ""
+                                            }>${size}</option>`
+                                        )
+                                        .join("")
+                                    : ""
+                                }
+
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Length *</label>
+                            <input type="number" step="0.10" placeholder="e.g., 6.00" value="${
+                              item.length
+                            }" 
+                                   oninput="updateItem(${
+                                     item.id
+                                   }, 'length', this.value)">
+                        </div>
+
+                        ${
+                          [
+                            "MS Plate",
+                            "MS Chequered Plate",
+                            "MS Sheet",
+                            "MS Galvanized Sheet",
+                            "SS Sheet 304",
+                            "SS Sheet 316",
+                            "SS Plate 304",
+                            "SS Plate 316",
+                          ].includes(item.materialType)
+                            ? `
+                        <div class="input-group">
+                            <label>Width *</label>
+                            <input type="number" step="0.10" placeholder="e.g., 4.00" value="${item.width}" 
+                                   oninput="updateItem(${item.id}, 'width', this.value)">
+                        </div>
+                        `
+                            : ""
+                        }
+
+                        <div class="input-group">
+                            <label>Length Unit *</label>
+                            <select onchange="updateItem(${
+                              item.id
+                            }, 'lengthUnit', this.value)">
+                                <option value="meter" ${
+                                  item.lengthUnit === "meter" ? "selected" : ""
+                                }>Meter (m)</option>
+                                <option value="mm" ${
+                                  item.lengthUnit === "mm" ? "selected" : ""
+                                }>Millimeter (mm)</option>
+                                <option value="feet" ${
+                                  item.lengthUnit === "feet" ? "selected" : ""
+                                }>Feet (ft)</option>
+                                <option value="inch" ${
+                                  item.lengthUnit === "inch" ? "selected" : ""
+                                }>Inch (in)</option>
+                            </select>
+                        </div>
+                        `
+                            : ""
+                        }
+
+                        <div class="input-group">
+                            <label>Quantity *</label>
+                            <input type="number" placeholder="e.g., 10" value="${
+                              item.quantity
+                            }" 
+                                   oninput="updateItem(${
+                                     item.id
+                                   }, 'quantity', this.value)">
+                        </div>
+
+                          <div class="input-group">
+                            <label>${
+                              item.materialType ===
+                              "Custom Materials (Per Unit)"
+                                ? "Cost per Unit (₹) (Before GST) *"
+                                : item.materialType ===
+                                  "Custom Materials (Per Kg)"
+                                ? "Cost per kg (₹) (Before GST) *"
+                                : "Cost per kg (₹) (Before GST)"
+                            }</label>
+                            <input type="number" step="0.10" placeholder="${
+                              item.materialType ===
+                              "Custom Materials (Per Unit)"
+                                ? "e.g., 450.00 per bag"
+                                : item.materialType ===
+                                  "Custom Materials (Per Kg)"
+                                ? "e.g., 65.00 per kg"
+                                : "e.g., 65.00 per kg"
+                            }" 
+                            value="${
+                              item.materialType ===
+                              "Custom Materials (Per Unit)"
+                                ? item.costPerUnit
+                                : item.costPerKg
+                            }" 
+                            oninput="updateItem(${item.id}, '${
+            item.materialType === "Custom Materials (Per Unit)"
+              ? "costPerUnit"
+              : "costPerKg"
+          }', this.value)">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Notes</label>
+                            <input type="text" placeholder="Optional notes" value="${
+                              item.notes
+                            }" 
+                                   oninput="updateItem(${
+                                     item.id
+                                   }, 'notes', this.value)">
+                        </div>
+                    </div>
+                `;
+          container.appendChild(itemDiv);
+        });
+      }
+
+      // Generate estimate
+      function generateInvoice() {
+        const seller = document.getElementById("seller").value;
+        const addressSlr = document.getElementById("addressSlr").value;
+        const gstNumberSlr = document.getElementById("gstNumberSlr").value;
+        const panSlr = document.getElementById("panSlr").value;
+        const contactSlr = document.getElementById("contactSlr").value;
+        const emailSlr = document.getElementById("emailSlr").value;
+        const shipFrom = document.getElementById("shipFrom").value;
+
+        const buyerName = document.getElementById("buyerName").value;
+        const addressBuyer = document.getElementById("addressBuyer").value;
+        const gstNumberBuyer = document.getElementById("gstNumberBuyer").value;
+        const panBuyer = document.getElementById("panBuyer").value;
+        const contactBuyer = document.getElementById("contactBuyer").value;
+        const emailBuyer = document.getElementById("emailBuyer").value;
+
+        const consigneeName = document.getElementById("consigneeName").value;
+        const addressConsignee =
+          document.getElementById("addressConsignee").value;
+        const contactConsignee =
+          document.getElementById("contactConsignee").value;
+        const gstNumberConsignee =
+          document.getElementById("gstNumberConsignee").value;
+        const panConsignee = document.getElementById("panConsignee").value;
+
+        const poNum = document.getElementById("poNum").value;
+        const poDateInput = document.getElementById("poDate").value;
+        const poDate = poDateInput
+          ? new Date(poDateInput).toLocaleDateString("en-IN")
+          : "";
+        const invNum = document.getElementById("invNum").value;
+        const invDateInput = document.getElementById("invDate").value;
+        const invoiceDate = invDateInput
+          ? new Date(invDateInput).toLocaleDateString("en-IN") // Gives DD/MM/YYYY
+          : new Date().toLocaleDateString("en-IN"); // Fallback to current date if empty
+        const eWayNum = document.getElementById("eWayNum").value;
+
+        document.getElementById("displaySeller").textContent = seller || " ";
+        document.getElementById("displayAddressSlr").textContent =
+          addressSlr || " ";
+        document.getElementById("displayGstNumberSlr").textContent =
+          gstNumberSlr || " ";
+        document.getElementById("displayPanSlr").textContent = panSlr || " ";
+        document.getElementById("displayContactSlr").textContent =
+          contactSlr || " ";
+        document.getElementById("displayEmailSlr").textContent =
+          emailSlr || " ";
+        document.getElementById("displayShipFrom").textContent =
+          shipFrom || " ";
+
+        document.getElementById("displayBuyerName").textContent =
+          buyerName || " ";
+        document.getElementById("displayAddressBuyer").textContent =
+          addressBuyer || " ";
+        document.getElementById("displayGstNumberBuyer").textContent =
+          gstNumberBuyer || " ";
+        document.getElementById("displayPanBuyer").textContent =
+          panBuyer || " ";
+        document.getElementById("displayContactBuyer").textContent =
+          contactBuyer || " ";
+        document.getElementById("displayEmailBuyer").textContent =
+          emailBuyer || " ";
+
+        document.getElementById("displayConsigneeName").textContent =
+          consigneeName || " ";
+        document.getElementById("displayAddressConsignee").textContent =
+          addressConsignee || " ";
+        document.getElementById("displayContactConsignee").textContent =
+          contactConsignee || " ";
+        document.getElementById("displayGstNumberConsignee").textContent =
+          gstNumberConsignee || " ";
+        document.getElementById("displayPanConsignee").textContent =
+          panConsignee || " ";
+
+        document.getElementById("displayPoNum").textContent = poNum || " ";
+        document.getElementById("displayPoDate").textContent = poDate || " ";
+        document.getElementById("displayInvNum").textContent = invNum || " ";
+        document.getElementById("displayInvDate").textContent =
+          invoiceDate || " ";
+        document.getElementById("displayEWayNum").textContent = eWayNum || " ";
+
+        const customerNotes = document.getElementById("customerNotes").value;
+        document.getElementById("displayCustomerNotes").textContent =
+          customerNotes;
+        const preparedBy = document.getElementById("signature").value;
+        document.getElementById("displayFooterSellerName").textContent =
+          seller || "Name of the Seller";
+        document.getElementById("displayPreparedBy").textContent =
+          preparedBy || " ";
+        const useIGST =
+          document.getElementById("igstCalculate")?.checked || false;
+        const calculations = [];
+        let hasError = false;
+
+        items.forEach((item) => {
+          // Check if material requires width (all sheet/plate materials) and Custom Materials
+          const sheetPlateTypes = [
+            "MS Plate",
+            "MS Chequered Plate",
+            "MS Sheet",
+            "MS Galvanized Sheet",
+            "SS Sheet 304",
+            "SS Sheet 316",
+            "SS Plate 304",
+            "SS Plate 316",
+          ];
+          const isCustomMaterialPerUnit =
+            item.materialType === "Custom Materials (Per Unit)";
+          const isCustomMaterialPerKg =
+            item.materialType === "Custom Materials (Per Kg)";
+
+          if (isCustomMaterialPerUnit) {
+            if (
+              !item.customDescription ||
+              !item.quantity ||
+              !item.costPerUnit
+            ) {
+              hasError = true;
+              return;
+            }
+          } else if (isCustomMaterialPerKg) {
+            if (
+              !item.customDescription ||
+              !item.quantity ||
+              !item.weightinKg ||
+              !item.costPerKg
+            ) {
+              hasError = true;
+              return;
+            }
+          } else if (sheetPlateTypes.includes(item.materialType)) {
+            if (
+              !item.materialType ||
+              !item.sectionSize ||
+              !item.length ||
+              !item.width ||
+              !item.quantity
+            ) {
+              hasError = true;
+              return;
+            }
+          } else {
+            if (
+              !item.materialType ||
+              !item.sectionSize ||
+              !item.length ||
+              !item.quantity
+            ) {
+              hasError = true;
+              return;
+            }
+          }
+
+          let totalWeight = 0;
+          let lengthInMeters = 0;
+          let widthInMeters = 0;
+          let areaInSqMeters = 0;
+
+          let sectionData = null;
+          // Only get sectionData for non-custom materials
+          if (!isCustomMaterialPerUnit && !isCustomMaterialPerKg) {
+            sectionData = steelDatabase[item.materialType][item.sectionSize];
+          }
+
+          if (isCustomMaterialPerUnit) {
+            // Weight is not calculated for custom materials
+            totalWeight = 0;
+          } else if (isCustomMaterialPerKg) {
+            //Weight input from user * quantity
+            totalWeight =
+              parseFloat(item.weightinKg || 0) * parseInt(item.quantity || 0);
+          } else if (sheetPlateTypes.includes(item.materialType)) {
+            // For Sheet/Plate materials: Weight = Length × Width × Thickness × Density
+            lengthInMeters = parseFloat(item.length);
+            widthInMeters = parseFloat(item.width);
+
+            switch (item.lengthUnit) {
+              case "mm":
+                lengthInMeters = lengthInMeters / 1000;
+                widthInMeters = widthInMeters / 1000;
+                break;
+              case "feet":
+                lengthInMeters = lengthInMeters * 0.3048;
+                widthInMeters = widthInMeters * 0.3048;
+                break;
+              case "inch":
+                lengthInMeters = lengthInMeters * 0.0254;
+                widthInMeters = widthInMeters * 0.0254;
+                break;
+              case "meter":
+              default:
+                break;
+            }
+
+            areaInSqMeters = lengthInMeters * widthInMeters;
+            const thicknessInMeters = sectionData.thickness / 1000;
+            const density = sectionData.density;
+            const volumeInCubicMeters = areaInSqMeters * thicknessInMeters;
+            totalWeight =
+              volumeInCubicMeters * density * parseInt(item.quantity);
+          } else {
+            // For other materials: Weight = Weight/m × Length × Quantity
+            const weightPerMeter = sectionData.weight;
+
+            lengthInMeters = parseFloat(item.length);
+            switch (item.lengthUnit) {
+              case "mm":
+                lengthInMeters = lengthInMeters / 1000;
+                break;
+              case "feet":
+                lengthInMeters = lengthInMeters * 0.3048;
+                break;
+              case "inch":
+                lengthInMeters = lengthInMeters * 0.0254;
+                break;
+              case "meter":
+              default:
+                break;
+            }
+
+            totalWeight =
+              weightPerMeter * lengthInMeters * parseInt(item.quantity);
+          }
+
+          let totalCost = 0;
+
+          if (isCustomMaterialPerUnit) {
+            // Custom material calculation
+            totalCost =
+              parseFloat(item.costPerUnit || 0) *
+              parseFloat(item.quantity || 0);
+          } else if (isCustomMaterialPerKg) {
+            totalCost = totalWeight * parseFloat(item.costPerKg || 0);
+          } else {
+            // Normal material calculation (weight + cost)
+            totalCost = totalWeight * parseFloat(item.costPerKg || 0);
+          }
+
+          //Add GST 18%
+          let iGst = 0;
+          let cGst = 0;
+          let sGst = 0;
+          if (totalCost > 0) {
+            if (useIGST) {
+              // ✔ IGST Mode
+              iGst = totalCost * 0.18;
+              cGst = 0;
+              sGst = 0;
+            } else {
+              // ✔ CGST + SGST Mode
+              iGst = 0;
+              cGst = totalCost * 0.09;
+              sGst = totalCost * 0.09;
+            }
+          }
+
+          calculations.push({
+            ...item,
+            displayname:
+              isCustomMaterialPerUnit || isCustomMaterialPerKg
+                ? item.customDescription
+                : item.materialType,
+            sectionSize:
+              isCustomMaterialPerUnit || isCustomMaterialPerKg
+                ? "N/A"
+                : item.sectionSize,
+            weightPerMeter:
+              isCustomMaterialPerUnit || isCustomMaterialPerKg
+                ? "N/A"
+                : sectionData.weight,
+            lengthInMeters:
+              isCustomMaterialPerUnit || isCustomMaterialPerKg
+                ? "N/A"
+                : lengthInMeters.toFixed(3),
+            widthInMeters: sheetPlateTypes.includes(item.materialType)
+              ? widthInMeters.toFixed(3)
+              : null,
+            areaInSqMeters: sheetPlateTypes.includes(item.materialType)
+              ? areaInSqMeters.toFixed(3)
+              : null,
+            totalWeight: totalWeight.toFixed(2),
+            totalCost: totalCost.toFixed(2),
+            iGst: iGst.toFixed(2),
+            cGst: cGst.toFixed(2),
+            sGst: sGst.toFixed(2),
+          });
+        });
+
+        if (hasError) {
+          alert(
+            "Please fill all required fields (marked with *) for all items."
+          );
+          return;
+        }
+
+        if (calculations.length === 0) {
+          alert("Please add at least one item.");
+          return;
+        }
+
+        displayResults(calculations);
+      }
+
+      // Display results
+      function displayResults(calculations) {
+        const tbody = document.getElementById("results-body");
+        const tfoot = document.getElementById("results-footer");
+
+        tbody.innerHTML = "";
+
+        let grandTotalWeight = 0;
+        let grandTotalCost = 0;
+
+        calculations.forEach((item, index) => {
+          if (
+            item.materialType === "Custom Materials (Per Unit)" ||
+            item.materialType === "Custom Materials (Per Kg)"
+          ) {
+            grandTotalCost =
+              grandTotalCost +
+              parseFloat(item.totalCost) +
+              parseFloat(item.iGst) +
+              parseFloat(item.cGst) +
+              parseFloat(item.sGst);
+          } else if (item.totalWeight) {
+            grandTotalWeight += parseFloat(item.totalWeight);
+            grandTotalCost =
+              grandTotalCost +
+              parseFloat(item.totalCost) +
+              parseFloat(item.iGst) +
+              parseFloat(item.cGst) +
+              parseFloat(item.sGst);
+          }
+          // Get unit label
+          const unitLabels = {
+            meter: "m",
+            mm: "mm",
+            feet: "ft",
+            inch: "in",
+          };
+
+          // Check if sheet/plate type
+          const sheetPlateTypes = [
+            "MS Plate",
+            "MS Chequered Plate",
+            "MS Sheet",
+            "MS Galvanized Sheet",
+            "SS Sheet 304",
+            "SS Sheet 316",
+            "SS Plate 304",
+            "SS Plate 316",
+          ];
+          const isSheetPlate = sheetPlateTypes.includes(item.materialType);
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.materialType}</td>
+                    <td>${item.customDescription || "-"}</td>
+                    <td><strong>${item.sectionSize}</strong></td>
+                    <td>${item.weightPerMeter}</td>
+                    <td>${item.length}</td>
+                    <td>${isSheetPlate ? item.width : "-"}</td>
+                    <td>${
+                      item.materialType === "Custom Materials (Per Unit)" ||
+                      item.materialType === "Custom Materials (Per Kg)"
+                        ? "-"
+                        : unitLabels[item.lengthUnit]
+                    }</td>
+                    <td>${item.quantity}</td>
+                    <td><strong>${item.totalWeight}</strong></td>
+                    <td>${
+                      item.materialType === "Custom Materials (Per Unit)"
+                        ? "-"
+                        : item.costPerKg || "-"
+                    }</td>
+                    <td>${
+                      item.materialType === "Custom Materials (Per Unit)"
+                        ? item.costPerUnit || "-"
+                        : "-"
+                    }</td>
+                    <td><strong>${
+                      parseFloat(item.totalCost) > 0 ? item.totalCost : "-"
+                    }</strong></td>
+                    <td>${item.notes || "-"}</td>
+                `;
+          tbody.appendChild(row);
+        });
+
+        let iGst = calculations.reduce((sum, item) => {
+          return sum + parseFloat(item.iGst);
+        }, 0);
+        let sGst = calculations.reduce((sum, item) => {
+          return sum + parseFloat(item.sGst);
+        }, 0);
+        let cGst = calculations.reduce((sum, item) => {
+          return sum + parseFloat(item.cGst);
+        }, 0);
+
+        tfoot.innerHTML = `
+                <tr>
+                    <td colspan="9" style="text-align: right;"><strong>SGST (9%):</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>₹ ${sGst.toFixed(2)}</strong></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="9" style="text-align: right;"><strong>CGST (9%):</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>₹ ${cGst.toFixed(2)}</strong></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="9" style="text-align: right;"><strong>IGST (18%):</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>₹ ${iGst.toFixed(2)}</strong></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="9" style="text-align: right;"><strong>Grand Total:</strong></td>
+                    <td><strong>${grandTotalWeight.toFixed(2)} kg</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>₹ ${grandTotalCost.toFixed(2)}</strong></td>
+                    <td></td>
+                </tr>
+            `;
+
+        document.getElementById("results-section").classList.add("active");
+
+        // Scroll to results
+        document
+          .getElementById("results-section")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      // Download PDF function
+      function downloadPDF() {
+        alert(
+          'Please use the Print button and select "Save as PDF" from your browser\'s print dialog.'
+        );
+      }
+
+      // Initialize on page load
+      window.onload = init;
